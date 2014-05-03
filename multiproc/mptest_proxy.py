@@ -10,19 +10,16 @@ OPTIONS:
 import logging, multiprocessing, sys, time
 
 
-logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
-
-
 def producer(objlist):
     '''
     add an item to list every 2 sec; ensure fixed size list
     '''
-    LOG = logging.getLogger('producer')
-    LOG.info('start')
+    logger = multiprocessing.get_logger()
+    logger.info('start')
     while True:
-        time.sleep(2)
+        time.sleep(1)
         msg = 'ding: {:04d}'.format(int(time.time()) % 10000)
-        LOG.debug('put: %s', msg)
+        logger.info('put: %s', msg)
         del objlist[0]
         objlist.append( msg )
 
@@ -31,40 +28,44 @@ def scanner(objlist):
     '''
     every now and then, run calculation on objlist
     '''
-    LOG = logging.getLogger('scanner')
-    LOG.info('start')
+    logger = multiprocessing.get_logger()
+    logger.info('start')
     while True:
-        time.sleep(10) 
-        LOG.debug('items: %s', list(objlist))
+        time.sleep(5) 
+        logger.info('items: %s', list(objlist))
             
 
 def main():
-    LOG = logging.getLogger('main')
-    LOG.info('setup')
+    opt_verbose = '-v' in sys.argv[1:] 
+    logger = multiprocessing.log_to_stderr(
+            level=logging.DEBUG if opt_verbose else logging.INFO,
+    )
+    logger.info('setup')
 
-    if '-v' in sys.argv[1:]:
-        multiprocessing.log_to_stderr(level=multiprocessing.util.DEBUG)
-
-    my_objlist = multiprocessing.Manager().list( # pylint: disable=E1101
+    # create fixed-length list, shared between producer & consumer
+    manager = multiprocessing.Manager()
+    my_objlist = manager.list( # pylint: disable=E1101
         [None] * 10
     )
 
     multiprocessing.Process(
         target=producer,
         args=(my_objlist,),
+        name='producer',
     ).start()
 
     multiprocessing.Process(
         target=scanner,
         args=(my_objlist,),
+        name='scanner',
         ).start()
 
-    LOG.info('sleeping')
+    logger.info('sleeping')
     try:
         time.sleep(999)
     except KeyboardInterrupt:
         pass
-    LOG.info('done')
+    logger.info('done')
     
 
 if __name__=='__main__':
