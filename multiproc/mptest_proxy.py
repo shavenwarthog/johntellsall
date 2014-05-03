@@ -17,7 +17,10 @@ def producer(objlist):
     logger = multiprocessing.get_logger()
     logger.info('start')
     while True:
-        time.sleep(1)
+        try:
+            time.sleep(1)
+        except KeyboardInterrupt:
+            return
         msg = 'ding: {:04d}'.format(int(time.time()) % 10000)
         logger.info('put: %s', msg)
         del objlist[0]
@@ -31,7 +34,10 @@ def scanner(objlist):
     logger = multiprocessing.get_logger()
     logger.info('start')
     while True:
-        time.sleep(5) 
+        try:
+            time.sleep(5)
+        except KeyboardInterrupt:
+            return
         logger.info('items: %s', list(objlist))
             
 
@@ -60,9 +66,9 @@ def main():
         name='scanner',
         ).start()
 
-    logger.info('sleeping')
+    logger.info('running forever')
     try:
-        time.sleep(999)
+        manager.join() # wait until both workers die
     except KeyboardInterrupt:
         pass
     logger.info('done')
