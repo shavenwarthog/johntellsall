@@ -2,6 +2,9 @@
 
 '''
 mptest_proxy.py -- producer adds to fixed-sized list; scanner uses them
+
+OPTIONS:
+-v		verbose multiprocessing output
 '''
 
 import logging, multiprocessing, sys, time
