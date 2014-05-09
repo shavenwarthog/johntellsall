@@ -1,0 +1,77 @@
+johnm@palabras:kill-pipeline$ 
+johnm@palabras:kill-pipeline$ 
+johnm@palabras:kill-pipeline$ 
+johnm@palabras:kill-pipeline$ 
+johnm@palabras:kill-pipeline$ [8P(reverse-i-search)`':[Cp': ncftpi': ping -c1 4.2.2.2p': pip install -r ./requirements.txt [C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C^C
+johnm@palabras:kill-pipeline$ ./pipeline.sh &
+[1] 21291
+johnm@palabras:kill-pipeline$ 02:06:39 PM workflow starting
+02:06:39 PM waiting for workflow to complete
+02:06:44 PM workflow jammed -- restarting; trying again
+
+johnm@palabras:kill-pipeline$ 
+johnm@palabras:kill-pipeline$ 
+johnm@palabras:kill-pipeline$ ./pipeline.sh: line 27: 21293 Terminated              ( sleep 30; echo gin )
+./pipeline.sh: line 27: 21294 Terminated              ( sleep 30; echo tonic )
+02:06:46 PM workflow starting
+02:06:46 PM waiting for workflow to complete
+[8P(reverse-i-search)`':[Ck': nslookup ipage.com[10Pi': kill %3[1@l[C[C[C[1@l[C[C[C02:06:51 PM workflow jammed -- restarting; trying again
+./pipeline.sh: line 27: 21308 Terminated              ( sleep 30; echo gin )
+./pipeline.sh: line 27: 21309 Terminated              ( sleep 30; echo tonic )
+02:06:53 PM workflow starting
+02:06:53 PM waiting for workflow to complete
+[4@johnm@palabras:kill-pipeline$[C[C[C[C[C[C[C[C
+bash: kill: %3: no such job
+johnm@palabras:kill-pipeline$ 
+johnm@palabras:kill-pipeline$ 
+johnm@palabras:kill-pipeline$ 
+johnm@palabras:kill-pipeline$ 
+johnm@palabras:kill-pipeline$ [8P(reverse-i-search)`':[Ck': kill %3[1@i[C[C[C[1@l[C[C[C[1@l[C[C[C^C
+johnm@palabras:kill-pipeline$ pkill -02:06:58 PM workflow jammed -- restarting; trying again
+[Kpgrep -f s./pipeline.sh: line 27: 21321 Terminated              ( sleep 30; echo gin )
+./pipeline.sh: line 27: 21322 Terminated              ( sleep 30; echo tonic )
+02:07:00 PM workflow starting
+02:07:00 PM waiting for workflow to complete
+leep
+21296
+21297
+21311
+21312
+21324
+21325
+21337
+21338
+21339
+johnm@palabras:kill-pipeline$ pgrep -f sleep[4P[1@k[1@i[1@l[1@l02:07:05 PM workflow jammed -- restarting; trying again
+
+./pipeline.sh: line 27: 21334 Terminated              ( sleep 30; echo gin )
+./pipeline.sh: line 27: 21335 Terminated              ( sleep 30; echo tonic )
+./pipeline.sh: line 27: 21344 Terminated              sleep 2
+johnm@palabras:kill-pipeline$ 02:07:06 PM workflow starting
+02:07:06 PM waiting for workflow to complete
+
+johnm@palabras:kill-pipeline$ 
+johnm@palabras:kill-pipeline$ 
+johnm@palabras:kill-pipeline$ 
+johnm@palabras:kill-pipeline$ 02:07:11 PM workflow jammed -- restarting; trying again
+./pipeline.sh: line 27: 21347 Terminated              ( sleep 30; echo gin )
+./pipeline.sh: line 27: 21348 Terminated              ( sleep 30; echo tonic )
+
+johnm@palabras:kill-pipeline$ 
+johnm@palabras:kill-pipeline$ 02:07:13 PM workflow starting
+
+johnm@palabras:kill-pipeline$ 02:07:13 PM waiting for workflow to complete
+
+johnm@palabras:kill-pipeline$ 
+johnm@palabras:kill-pipeline$ pkill -f sleepgrep[C[C[C[C[C[C[C[C[Ckill[C[C[C[C[C[C[C[C[C
+./pipeline.sh: line 27: 21363 Terminated              sleep 30
+gin
+johnm@palabras:kill-pipeline$ ./pipeline.sh: line 27: 21365 Terminated              sleep 5
+./pipeline.sh: line 27: 21364 Terminated              sleep 30
+tonic
+02:07:16 PM workflow done!
+
+[1]+  Done                    ./pipeline.sh
+johnm@palabras:kill-pipeline$ 
+johnm@palabras:kill-pipeline$ 
+johnm@palabras:kill-pipeline$ exit

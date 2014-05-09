@@ -12,7 +12,7 @@ import logging, multiprocessing, sys, time
 
 def producer(objlist):
     '''
-    add an item to list every 2 sec; ensure fixed size list
+    add an item to list every sec; ensure fixed size list
     '''
     logger = multiprocessing.get_logger()
     logger.info('start')

@@ -2,7 +2,6 @@
 
 # pipeline.sh -- start workflow; restart if jammed
 
-
 while true; do
 
     date '+%X workflow starting'
