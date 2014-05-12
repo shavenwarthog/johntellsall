@@ -1,25 +1,36 @@
-$ ./pipeline.sh &
-[1] 21291
+start workflow control script
 
-02:06:39 PM workflow starting
-02:06:39 PM waiting for workflow to complete
-02:06:44 PM workflow jammed -- restarting; trying again
+`$ ./pipeline.sh &`
 
-./pipeline.sh: line 27: 21293 Terminated              ( sleep 30; echo gin )
-./pipeline.sh: line 27: 21294 Terminated              ( sleep 30; echo tonic )
+`[1] 21291`
 
-02:06:46 PM workflow starting
-02:06:46 PM waiting for workflow to complete
+`02:06:39 PM workflow starting`
 
-$ pkill -f sleep
+`02:06:39 PM waiting for workflow to complete`
 
-./pipeline.sh: line 27: 21363 Terminated              sleep 30
-gin
-./pipeline.sh: line 27: 21365 Terminated              sleep 5
-./pipeline.sh: line 27: 21364 Terminated              sleep 30
-tonic
-02:07:16 PM workflow done!
+`02:06:44 PM workflow jammed -- restarting; trying again`
 
-[1]+  Done                    ./pipeline.sh
+`./pipeline.sh: line 27: 21293 Terminated              ( sleep 30; echo gin )`
+
+`./pipeline.sh: line 27: 21294 Terminated              ( sleep 30; echo tonic )`
+
+`02:06:46 PM workflow starting`
+
+`02:06:46 PM waiting for workflow to complete`
+
+`$ pkill -f sleep`
+
+`./pipeline.sh: line 27: 21363 Terminated              sleep 30`
+
+`./pipeline.sh: line 27: 21365 Terminated              sleep 5`
+
+`./pipeline.sh: line 27: 21364 Terminated              sleep 30`
+
+`tonic`
+
+`02:07:16 PM workflow done!`
+
+`[1]+  Done                    ./pipeline.sh`
+
 
 
