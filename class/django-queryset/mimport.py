@@ -9,7 +9,7 @@ USAGE:
 	mimport.py going
 '''
 
-import datetime, fileinput, functools, os, re, sys
+import datetime, fileinput, os, re, sys, warnings
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'project.settings.local'
 sys.path.append('project/project')
@@ -45,8 +45,14 @@ def parse_events(lines):
 
 
 def main():
+    Meeting.objects.all().delete()
     for tstamp,name in parse_events( fileinput.input() ):
         print tstamp,name
+
+        # TODO: use real UTC dates
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            Meeting(name=name, meet_date=tstamp).save()
 
 
 if __name__=='__main__':
