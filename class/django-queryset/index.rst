@@ -2,9 +2,10 @@
 .. Django QuerySets and Functional Programming slides file, created by
    hieroglyph-quickstart on Mon May 12 14:08:05 2014.
 
-====================
+==================================================
 Django QuerySets and Functional Programming
-====================
+==================================================
+
 
 
 QuerySets are Django's way of getting data.
@@ -18,11 +19,48 @@ class Drink(Model):
 a
 ================
 
-A query is a list of filters and modifiers. It's lazy -- converted to SQL when needed.
+A query describes what kind of data you want
 
-QuerySet is the result. Also lazy -- gets executed when needed, results stream from the database.
+one or more Models
 
-b================
+commonly in Django we just specify the query then hand the results -- the QuerySet -- directly to a template for rendering
+
+A query is a list of filters and modifiers. It's lazy -- converted to SQL when needed. Sometimes a single result is all that's needed
+
+>>> m = Meeting.objects.get(id=12)
+<Meeting: Meeting object>
+
+
+More commonly, you're looking for a list of objects matching some criteria.  A QuerySet is the result. Like the query, a QuerySet is also lazy -- it gets executed when needed, and results stream from the database.
+
+>>> x = Meeting.objects.filter(name__contains='go')
+>>> Meeting.objects.all()
+[<Meeting: Meeting object>]
+>>> type( Meeting.objects.all() )
+<class 'django.db.models.query.QuerySet'>
+
+Note that the QuerySet doesn't hit the database unless it needs to.  Even if there are no matches, it'll return an object.
+
+>>> type(Meeting.objects.filter(name='java'))
+<class 'django.db.models.query.QuerySet'>
+
+To see if there are any matches, convert the results into a list
+
+>>> list(qs)
+[]
+
+This isn't efficient -- Python has to hit the database, do a search, parse each row into a separate Model object, and allocate the space for everything.  And then you just check if it's empty or not!
+
+More efficient: ask the database if there are any matches
+
+
+A *generator* is a stream of data.  QuerySets are similar -- a stream of Model objects
+
+Since it's a stream, one you consume it, it's gone.  Printing is consuming -- thus debugging things with streams can be... interesting.
+
+
+page
+================
 
 
 
@@ -97,7 +135,7 @@ if tree_set.exists():
 page
 ================
 
-Here's the equilvalent to qs.exists()
+Here's the equivalent to qs.exists()
 
 qs = Event.objects.filter(pk=3); qs.query.set_limits(high=1); print qs.query 
 
