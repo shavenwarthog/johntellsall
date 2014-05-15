@@ -7,6 +7,21 @@ Django QuerySets and Functional Programming
 ==================================================
 
 
+* THEME: 
+
+By using techniques from Functional Programming, we can make simpler,
+higher performance, more reliable and testable code, faster.
+
+Functional Programming
+FP in Python
+Django QuerySets
+
+
+
+
+
+================================================================
+
 
 QuerySets are Django's way of getting data.
 
@@ -57,6 +72,91 @@ More efficient: ask the database if there are any matches
 A *generator* is a stream of data.  QuerySets are similar -- a stream of Model objects
 
 Since it's a stream, one you consume it, it's gone.  Printing is consuming -- thus debugging things with streams can be... interesting.
+
+TODO: fileinput example
+TODO: map/reduce
+TODO: Twitter stream example?
+
+
+
+
+generators
+QuerySet (+ query)
+
+State
+- none*: random()
+- init: open()
+- other: trans = db().requestmany()
+
+
+
+Languages are procedural: programs are lists of instructions that tell the computer what to do with the program’s input. C, Pascal, and even Unix shells are procedural languages.
+In declarative languages, you write a specification that describes the problem to be solved, and the language implementation figures out how to perform the computation efficiently. SQL is the declarative language you’re most likely to be familiar with; a SQL query describes the data set you want to retrieve, and the SQL engine decides whether to scan tables or use indexes, which subclauses should be performed first, etc.
+Object-oriented programs manipulate collections of objects. Objects have internal state and support methods that query or modify this internal state in some way. Smalltalk and Java are object-oriented languages. C++ and Python are languages that support object-oriented programming, but don’t force the use of object-oriented features.
+Functional programming decomposes a problem into a set of functions. Ideally, functions only take inputs and produce outputs, and don’t have any internal state that affects the output produced for a given input. Well-known functional languages include the ML family (Standard ML, OCaml, and other variants) and Haskell.
+
+practical advantages to the functional style:
+
+Modularity.
+Composability.
+Ease of debugging and testing.
+~ caching
+~ parallelization
+
+enumerate(iter) 
+
+Iterators can be tricky to work with
+
+- first three elements of a list:
+
+>>> range(10)
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+>>> range(100)[:3]
+[0, 1, 2]
+
+- first three elements of iterator -- can't use slice operator!
+
+>>> xrange(100)[:3]
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: sequence index must be integer, not 'slice'
+
+- first three elements of iterator -- use islice
+
+>>> from itertools import *
+
+# ... to get another iterator!
+
+>>> islice(count(10), 3)
+<itertools.islice object at 0x7f9bc54a5d08>
+
+# turn it into a concrete list
+
+>>> list(islice(count(10), 3))
+[10, 11, 12]
+
+
+>>> f=open('ing.txt')
+>>> f
+<open file 'ing.txt', mode 'r' at 0x7f9bc54fe4b0>
+
+>>> f[0]
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: 'file' object has no attribute '__getitem__'
+
+>>> islice(f,1)
+<itertools.islice object at 0x7f9bc54a5d60>
+>>> list(islice(f,1))
+['whiskey\n']
+>>> list(islice(f,1))
+['syrup\n']
+
+>>> f.next()
+'bitters\n'
+
+
+
 
 
 page
@@ -202,6 +302,18 @@ Questions?
 
 References
 ================
+
+Can Your Programming Language Do This? by Joel Spolsky
+
+http://www.joelonsoftware.com/items/2006/08/01.html
+
+Wikipedia: Functional Programming
+
+http://en.wikipedia.org/wiki/Functional_programming
+
+Functional Programming HOWTO by Andy Kuchling
+
+https://docs.python.org/2/howto/functional.html
 
 Using Django querysets effectively by Dave Hall
 
