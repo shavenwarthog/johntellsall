@@ -7,19 +7,83 @@ Django QuerySets and Functional Programming
 ==================================================
 
 
-* THEME: 
+THEME
+================
 
 By using techniques from Functional Programming, we can make simpler,
 higher performance, more reliable and testable code, faster.
 
-Functional Programming
+Contents
+================
+.. toctree::
+   :maxdepth: 2
+
+FP vs Procedural programming
+================================================================
+
+procedural: list of instructions
+
+.. code-block:: python
+
+    def upfile(inpath, outpath):
+        with open(outpath, 'w') as outf:
+            for line in open(inpath):
+                outf.write( line.upper() )
+    
+    upfile('ing.txt', '/dev/stdout')
+    
+
+FP vs Object Orientation
+================================================================
+
+object oriented: manipulate collections of objects
+Each has state and specific functions to query/modify state.
+
+.. code-block:: python
+
+    class Upcase(list):
+        def __init__(self, inpath):
+            super(Upcase,self).__init__(
+                open(inpath).readlines()
+                )
+        def writelines(self, outpath):
+            with open(outpath, 'w') as outf:
+                for line in self:
+                    outf.write( line.upper() )
+    Upcase('ing.txt').writelines('/dev/stdout')
+    
+
+FP example
+================================================================
+
+.. code-block:: python
+
+    def upcase(lines):
+        for line in lines:
+            yield line.upper()
+    def writelines(outpath, lines):
+        with open(outpath, 'w') as outf:
+            for line in lines:
+                outf.write( line )
+    writelines( '/dev/stdout',
+                upcase( open('ing.txt') )
+                )
+    
+
 FP in Python
+================================================================
+
 Django QuerySets
+================================================================
+
+.. slide:: The Slide Title
+   :level: 2
+
+   This Slide would appear as a level two slide.
 
 
 
-
-
+historical
 ================================================================
 
 
@@ -90,11 +154,13 @@ State
 
 
 
-Languages are procedural: programs are lists of instructions that tell the computer what to do with the program’s input. C, Pascal, and even Unix shells are procedural languages.
-In declarative languages, you write a specification that describes the problem to be solved, and the language implementation figures out how to perform the computation efficiently. SQL is the declarative language you’re most likely to be familiar with; a SQL query describes the data set you want to retrieve, and the SQL engine decides whether to scan tables or use indexes, which subclauses should be performed first, etc.
-Object-oriented programs manipulate collections of objects. Objects have internal state and support methods that query or modify this internal state in some way. Smalltalk and Java are object-oriented languages. C++ and Python are languages that support object-oriented programming, but don’t force the use of object-oriented features.
-Functional programming decomposes a problem into a set of functions. Ideally, functions only take inputs and produce outputs, and don’t have any internal state that affects the output produced for a given input. Well-known functional languages include the ML family (Standard ML, OCaml, and other variants) and Haskell.
+.. note::
 
+  Languages are procedural: programs are lists of instructions that tell the computer what to do with the program’s input. C, Pascal, and even Unix shells are procedural languages.
+  In declarative languages, you write a specification that describes the problem to be solved, and the language implementation figures out how to perform the computation efficiently. SQL is the declarative language you’re most likely to be familiar with; a SQL query describes the data set you want to retrieve, and the SQL engine decides whether to scan tables or use indexes, which subclauses should be performed first, etc.
+  Object-oriented programs manipulate collections of objects. Objects have internal state and support methods that query or modify this internal state in some way. Smalltalk and Java are object-oriented languages. C++ and Python are languages that support object-oriented programming, but don’t force the use of object-oriented features.
+  Functional programming decomposes a problem into a set of functions. Ideally, functions only take inputs and produce outputs, and don’t have any internal state that affects the output produced for a given input. Well-known functional languages include the ML family (Standard ML, OCaml, and other variants) and Haskell.
+  
 practical advantages to the functional style:
 
 Modularity.
@@ -213,7 +279,7 @@ page
 
 An 'if' will evaluate the query, retrieving all the rows, all the fields
 
-city_set = City.objects.filter(name="Cambridge")
+>>> city_set = City.objects.filter(name="Cambridge")
 # The `if` statement evaluates the queryset.
 if city_set:
     # We don't need the results of the queryset here, but the
@@ -225,7 +291,7 @@ page
 
 If you only want to see if there are *any*, then use exists().  This hits the database, but it's efficient.
 
-   tree_set = Tree.objects.filter(type="deciduous")
+>>> tree_set = Tree.objects.filter(type="deciduous")
 # The `exists()` check avoids populating the queryset cache.
 if tree_set.exists():
     # No rows were fetched from the database, so we save on
