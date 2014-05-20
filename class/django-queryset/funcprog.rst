@@ -1,3 +1,20 @@
+Why Functional Programming
+================================================================
+
+practical advantages to the functional style:
+
+* Modularity
+* Composability
+* Ease of debugging and testing 
+* Caching
+* Parallelization
+
+.. rst-class:: build
+
+* Buzzwordy!
+* Chicks dig it!
+
+
 FP vs Procedural programming
 ================================================================
 
@@ -76,16 +93,6 @@ F
                 )
     
 
-FP in Practice
-================================================================
-
-practical advantages to the functional style:
-
-* Modularity
-* Composability
-* Ease of debugging and testing 
-* Caching
-* Parallelization
 
 .. note::
    Generally you'll mix these styles. IE: function that returns

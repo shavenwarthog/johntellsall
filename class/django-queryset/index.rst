@@ -11,17 +11,21 @@ THEME
 ================
 
 By using techniques from Functional Programming, we can make simpler,
-higher performance, more reliable and testable code, faster.
+more reliable and testable code, faster.
 
-Contents
-================
 .. toctree::
-   Funtional Programming <funcprog>
+   Functional Programming <funcprog>
    FP in Python <fp_python>
    querysets
    Patterns and Consequences <pat_conseq>
    summary
-   :maxdepth: 2
+
+.. note::
+
+   stream of objects with state
+   lazy vs eager
+   Heisenberg
+
 
 Django QuerySets
 ================================================================
