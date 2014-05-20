@@ -28,26 +28,14 @@ Contents
    Heisenberg
 
 
-The Slide Title
-----------------
-
-   This Slide would appear as a level two slide.
-
-3rd slide title
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. py:function:: enumerate(sequence[, start=0])
-
-   Return an iterator that yields tuples of an index and an item of the
-   *sequence*. (And so on.)
-
-
-
 historical
 ================================================================
 
 
 QuerySets are Django's way of getting data.
+
+
+
 
 Example: you are interested in making drinks.  As a data object, this is:
 

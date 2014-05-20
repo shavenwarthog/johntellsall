@@ -79,6 +79,11 @@ F
    and don’t have any internal state that affects the output produced
    for a given input.
 
+   Eliminating side effects, i.e. changes in state that do not depend
+   on the function inputs, can make it much easier to understand and
+   predict the behavior of a program
+
+   http://en.wikipedia.org/wiki/Functional_programming
 
 .. code-block:: python
 
