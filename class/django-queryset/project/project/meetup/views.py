@@ -1,5 +1,15 @@
-from django.template.response import TemplateResponse
+# pylint: disable=E1101
+
+from django.views.generic import TemplateView
+
+from meetup.models import Meeting
 
 
-def allstuff(request):
-    return TemplateResponse(request, 'allstuff.html')
+class AllstuffView(TemplateView):
+    template_name = 'allstuff.html'
+
+    def get_context_data(self):
+        return dict(
+            meetings=Meeting.objects.all(),
+            )
+

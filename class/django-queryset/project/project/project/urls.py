@@ -1,4 +1,4 @@
-# pylint: disable=E1101
+# pylint: disable=E1101,E1120
 
 from django.conf.urls import patterns, include, url
 # from django.conf.urls.static import static
@@ -14,7 +14,7 @@ import meetup.views as meetup_v
 urlpatterns = patterns('',
     url(r'^$', TemplateView.as_view(template_name='base.html')),
 
-    url(r'^allstuff/?$', meetup_v.allstuff),
+    url(r'^allstuff/?$', meetup_v.AllstuffView.as_view()),
 
     # Examples:
     # url(r'^$', 'project.views.home', name='home'),
