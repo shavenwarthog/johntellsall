@@ -1,7 +1,15 @@
+.. slide:: Three Programming Paradigms
+   :level: 2
+
+   .. figure:: /_static/3-hoodlums-nancy.png
+   :class: fill
+
+
+
 Why Functional Programming
 ================================================================
 
-Practical Advantages to FP
+Practical Advantages to Functional Programming
 ----------------------------------------------------------------
 
    * Modularity
@@ -12,12 +20,13 @@ Practical Advantages to FP
 
 .. rst-class:: build
 
-   * Buzzwordy!
-   * Chicks dig it!
+   - Buzzwordy!
+
+   - Chicks dig it!
 
 
 FP vs Procedural programming
-================================================================
+----------------------------------------------------------------
 
 procedural: list of instructions
 
@@ -32,6 +41,11 @@ input, output, can modify inputs
     
     upfile('ing.txt', '/dev/stdout')
     
+.. rst-class:: build
+
+   * how can you test this?
+
+   * run in parallel?
 
 .. note::
 
@@ -40,10 +54,12 @@ input, output, can modify inputs
 
 
 FP vs Object Orientation
-================================================================
+----------------------------------------------------------------
 
-object oriented: Object has state and specific functions to
-query/modify state.  Easy to specialize by subclassing.
+procedural: list of instructions
+
+**object oriented: Object has state and specific functions to
+query/modify state.  Easy to specialize by subclassing.**
 
 .. code-block:: python
 
@@ -69,9 +85,21 @@ query/modify state.  Easy to specialize by subclassing.
 
     
 Functional Programming
+----------------------------------------------------------------
+
+procedural: list of instructions
+
+object oriented: object has state and specific functions to
+query/modify state.  Easy to specialize by subclassing
+
+**functional: functions operate on streams of objects, preferably without internal state**
+
+Stop right now
 ================================================================
 
-F
+read Andy Kuchling's `Functional Programming HOWTO`_
+
+.. _`Functional Programming HOWTO`: https://docs.python.org/2.7/howto/functional.html
 
 .. note:: 
    Functional programming decomposes a problem into a set of
@@ -85,15 +113,23 @@ F
 
    http://en.wikipedia.org/wiki/Functional_programming
 
+
+FP Example
+----------------------------------------------------------------
+
+functional: functions operate on streams of objects, preferably without internal state
+
 .. code-block:: python
 
     def upcase(lines):
         for line in lines:
             yield line.upper()
+
     def writelines(outpath, lines):
         with open(outpath, 'w') as outf:
             for line in lines:
                 outf.write( line )
+ 
     writelines( '/dev/stdout',
                 upcase( open('ing.txt') )
                 )

@@ -15,6 +15,8 @@ make simpler, more reliable and testable code, faster.
 Contents
 ----------------
    .. toctree::
+      :maxdepth: 1
+      
       Functional Programming <funcprog>
       FP in Python <fp_python>
       querysets
@@ -260,35 +262,6 @@ TBD: other databases -- Mongo? flat file?
 
 
 
-Contents:
-
-.. toctree::
-   :maxdepth: 2
-
-
-First Slide
-===========
-
-Some content on the first slide.
-
-Second Slide
-============
-
-* A
-* Bulleted
-* List
-
-
-Show Bullets Incrementally
-==========================
-
-.. rst-class:: build
-
-- Adding the ``build`` class to a container
-- To incrementally show its contents
-- Remember that *Sphinx* maps the basic ``class`` directive to
-  ``rst-class``
-
 
 Questions?
 ================
@@ -296,7 +269,7 @@ Questions?
 .. figure:: /_static/john-bold.jpg
    :class: fill
 
-   CC BY-SA http://www.flickr.com/photos/tamburix/2900909093/
+.. note::   CC BY-SA http://www.flickr.com/photos/tamburix/2900909093/
 
 
 References
