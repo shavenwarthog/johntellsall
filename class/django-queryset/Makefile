@@ -1,5 +1,10 @@
+all:
+
 include dev.mk
 include hieroglyph.mak
+
+start:
+	./project/project/manage.py runserver
 
 jslides:
 	sphinx-build -qN -b slides -d _build/doctrees \

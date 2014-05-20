@@ -1,7 +1,8 @@
 Why Functional Programming
 ================================================================
 
-.. slide:: Practical Advantages to FP
+Practical Advantages to FP
+----------------------------------------------------------------
 
    * Modularity
    * Composability
@@ -11,8 +12,8 @@ Why Functional Programming
 
 .. rst-class:: build
 
-* Buzzwordy!
-* Chicks dig it!
+   * Buzzwordy!
+   * Chicks dig it!
 
 
 FP vs Procedural programming

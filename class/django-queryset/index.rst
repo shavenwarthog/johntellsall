@@ -12,9 +12,8 @@ THEME
 By using techniques from Functional Programming, we can
 make simpler, more reliable and testable code, faster.
 
-.. slide: Contents
-   :level 2
-
+Contents
+----------------
    .. toctree::
       Functional Programming <funcprog>
       FP in Python <fp_python>
