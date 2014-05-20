@@ -2,24 +2,26 @@
 .. Django QuerySets and Functional Programming slides file, created by
    hieroglyph-quickstart on Mon May 12 14:08:05 2014.
 
-==================================================
 Django QuerySets and Functional Programming
 ==================================================
 
 
 THEME
-================
+----------------
 
-By using techniques from Functional Programming, we can make simpler,
-more reliable and testable code, faster.
+By using techniques from Functional Programming, we can
+make simpler, more reliable and testable code, faster.
 
-.. toctree::
-   Functional Programming <funcprog>
-   FP in Python <fp_python>
-   querysets
-   Patterns and Consequences <pat_conseq>
-   summary
+.. slide: Contents
+   :level 2
 
+   .. toctree::
+      Functional Programming <funcprog>
+      FP in Python <fp_python>
+      querysets
+      Patterns and Consequences <pat_conseq>
+      summary
+      
 .. note::
 
    stream of objects with state
@@ -27,13 +29,18 @@ more reliable and testable code, faster.
    Heisenberg
 
 
-Django QuerySets
-================================================================
-
-.. slide:: The Slide Title
-   :level: 2
+The Slide Title
+----------------
 
    This Slide would appear as a level two slide.
+
+3rd slide title
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. py:function:: enumerate(sequence[, start=0])
+
+   Return an iterator that yields tuples of an index and an item of the
+   *sequence*. (And so on.)
 
 
 

@@ -1,13 +1,13 @@
 Why Functional Programming
 ================================================================
 
-practical advantages to the functional style:
+.. slide:: Practical Advantages to FP
 
-* Modularity
-* Composability
-* Ease of debugging and testing 
-* Caching
-* Parallelization
+   * Modularity
+   * Composability
+   * Ease of debugging and testing 
+   * Caching
+   * Parallelization
 
 .. rst-class:: build
 
