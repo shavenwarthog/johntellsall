@@ -35,10 +35,8 @@ ME
    ****************************************************************
 
 
-.. note::   .. figure:: /_static/3-hoodlums-nancy.png
-  .. slide:: Three Programming Paradigms
-   :level: 1
-   :class: fill
+.. note::   figure:: /_static/3-hoodlums-nancy.png
+  slide:: Three Programming Paradigms
 
 
 Why Functional Programming
