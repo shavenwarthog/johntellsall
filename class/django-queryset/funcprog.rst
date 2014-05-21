@@ -13,7 +13,7 @@ Practical Advantages to Functional Programming
 ----------------------------------------------------------------
 
    * Modularity
-   * Composability
+   * `Composability!`_
    * Ease of debugging and testing 
    * Caching
    * Parallelization
@@ -24,11 +24,13 @@ Practical Advantages to Functional Programming
 
    - Chicks dig it!
 
+.. _`Composability!`: http://en.wikipedia.org/wiki/Composability
+
 
 FP vs Procedural programming
 ----------------------------------------------------------------
 
-procedural: list of instructions
+**procedural: list of instructions**
 
 input, output, can modify inputs
 
@@ -72,6 +74,7 @@ query/modify state.  Easy to specialize by subclassing.**
             with open(outpath, 'w') as outf:
                 for line in self:
                     outf.write( line.upper() )
+
     Upcase('ing.txt').writelines('/dev/stdout')
 
 .. note::
@@ -92,10 +95,28 @@ procedural: list of instructions
 object oriented: object has state and specific functions to
 query/modify state.  Easy to specialize by subclassing
 
-**functional: functions operate on streams of objects, preferably without internal state**
+**functional: functions operate on streams of objects**
+
+.. note:: preferably without internal state
+
+FP: list of functions
+----------------------------------------------------------------
+
+>>> print '\n'.join( (
+    amount(hasdata)
+    for hasdata in (
+        line for line in open('ing.txt')
+            if isdata(line)
+    )
+) )
+
+.. figure:: /_static/girl-with-beads2.jpg
+   :figwidth: 50%
+
+
 
 Stop right now
-================================================================
+----------------------------------------------------------------
 
 read Andy Kuchling's `Functional Programming HOWTO`_
 
@@ -114,10 +135,12 @@ read Andy Kuchling's `Functional Programming HOWTO`_
    http://en.wikipedia.org/wiki/Functional_programming
 
 
-FP Example
+FP: upcase
 ----------------------------------------------------------------
 
-functional: functions operate on streams of objects, preferably without internal state
+functional: functions operate on streams of objects
+
+.. note , preferably without internal state
 
 .. code-block:: python
 
@@ -130,6 +153,27 @@ functional: functions operate on streams of objects, preferably without internal
             for line in lines:
                 outf.write( line )
  
+    writelines( '/dev/stdout',
+                upcase( open('ing.txt') )
+                )
+
+FP: upcase 2
+----------------------------------------------------------------
+
+.. code-block:: python
+
+    def upcase(lines):
+        # IN: stream of lines; OUT: stream of lines
+        for line in lines:
+            yield line.upper()
+
+    def writelines(outpath, lines):
+        # IN: stream of lines; OUT: nothing
+        with open(outpath, 'w') as outf:
+            for line in lines:
+                outf.write( line )
+ 
+    # open() is OUT: stream of lines
     writelines( '/dev/stdout',
                 upcase( open('ing.txt') )
                 )
