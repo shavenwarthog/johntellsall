@@ -39,7 +39,11 @@ if 0:
 
 print('Transferring {} files'.format(len(paths)))
 
-user,pw = os.environ['FTP_AUTH'].split(':')
+try:
+    user,pw = os.environ['FTP_AUTH'].split(':')
+except KeyError:
+    sys.exit('usage: FTP_AUTH=(user):(pass) ftpsync.py')
+
 ftp = FTP(host='ftp.ipage.com', user=user, passwd=pw)
 if 0:
     ftp.set_debuglevel(1)
