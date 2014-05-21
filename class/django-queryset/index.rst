@@ -2,15 +2,17 @@
 .. Django QuerySets and Functional Programming slides file, created by
    hieroglyph-quickstart on Mon May 12 14:08:05 2014.
 
-Django QuerySets and Functional Programming
-==================================================
+Django QuerySets and Functional Programming (Draft)
+===================================================
+
+john@johntellsall.com
 
 
 THEME
 ================
 
 By using techniques from Functional Programming, we can
-make simpler, more reliable and testable code, faster.
+make modular, reliable and testable code, faster.
 
 .. note::
       Functional Programming <funcprog>
@@ -20,7 +22,6 @@ make simpler, more reliable and testable code, faster.
       summary
       
 .. note::
-
    stream of objects with state
    lazy vs eager
    Heisenberg
@@ -31,7 +32,6 @@ make simpler, more reliable and testable code, faster.
 
    .. figure:: /_static/3-hoodlums-nancy.png
    :class: fill
-
 
 
 Why Functional Programming
@@ -142,8 +142,9 @@ FP: list of functions
    :figwidth: 50%
 
 
-
 .. note::
+
+   Data streams from function to function -- no side effects.
 
    read Andy Kuchling's `Functional Programming HOWTO`_
 
@@ -166,8 +167,6 @@ FP: upcase
 ----------------------------------------------------------------
 
 functional: functions operate on streams of objects
-
-.. note , preferably without internal state
 
 .. code-block:: python
 
@@ -303,7 +302,7 @@ FP: map, filter
    Apply function to every item of iterable and return a **list** of the results. 
 
 
-Recommended: generator expressions
+Preferred: generator expressions
 ----------------------------------------------------------------
 
 **filter replacement**
@@ -319,13 +318,13 @@ Recommended: generator expressions
    http://legacy.python.org/dev/peps/pep-0289/
 
 
-filter replacement
+Preferred: filter replacement
 ----------------------------------------------------------------
 
 >>> print (line for line in open('ing.txt') if 'whiskey' in line)
 <generator object <genexpr> at 0x7f429d7c8eb0>
 
-filter replacement
+convert to list so we can see
 ----------------------------------------------------------------
 
 >>> print list((line for line in open('ing.txt') if 'whiskey' in line)**)
@@ -373,14 +372,15 @@ Iterator Functions
 ----------------------------------------------------------------
 
 .. py:function:: xrange(stop) -> counter (xrange object)
+
 .. py:function:: xrange(start, stop[, step]) -> counter
 
-.. py:function:: chain(*iterables)
+.. py:function:: chain(*iterables) -> each item in order
 
-.. py:function:: ifilter(f, iter) -> substream of iter
+.. py:function:: ifilter(f, iter) -> substream of iter. Like filter, for iterators.
+
 .. py:function:: islice(iter, num) -> counted items of iter
 
-list(
 
 .. note::
    .. py:function:: imap(func, p, q) -> f(p), f(q), ...
@@ -441,19 +441,91 @@ models.py
 ----------------
 
 >>> from django.db import models
-
-class Meeting(models.Model):
+   class Meeting(models.Model):
     name = models.CharField(max_length=100)
     meet_date = models.DateTimeField()
 
-Like Iterator
-----------------
+QuerySet review
+----------------------------------------------------------------
+>>> m = Meeting.objects.get(id=12)
+<Meeting: Meeting object>
+
+>>> Meeting.objects.get(id=12).__dict__
+{'meet_date': datetime.datetime(2014, 5, 20, 7, 0, tzinfo=<UTC>), '_state': <django.db.models.base.ModelState object at 0x2bd1050>, 'id': 3, 'name': u'LA Django Monthly Meeting'}
+
+.. note::
+   A query is a list of filters and modifiers. It's lazy -- converted to SQL when needed. Sometimes a single result is all that's needed
+
+   More commonly, you're looking for a list of objects matching some criteria.  A QuerySet is the result. Like the query, a QuerySet is also lazy -- it gets executed when needed, and results stream from the database.
+
+To see if there are any matches, convert the results into a list
+
+>>> list(qs)
+[]
+
+This isn't efficient -- Python has to hit the database, do a search, parse each row into a separate Model object, and allocate the space for everything.  And then you just check if it's empty or not!
+
+More efficient: ask the database if there are any matches
+
+
+QuerySet and iterators
+----------------------------------------------------------------
+
+>>> x = Meeting.objects.filter(name__contains='go')
+
+>>> x=Meeting.objects.filter(name='java')
+>>> x
+[]
+>>> type(x)
+<class 'django.db.models.query.QuerySet'>
+>>> bool(x)
+False
+
+Functional QuerySets
+================================================================
+
+.. rst-class:: build
+
+   How can you tell if a list is empty or not?
+
+   . an iterator?
+
+   . a QuerySet?
+
+QuerySet details
+----------------------------------------------------------------
+
+>>> x=Meeting.objects.filter(name='java')
+>>> x
+[]
+>>> type(x)
+<class 'django.db.models.query.QuerySet'>
+>>> bool(x)
+False
+
+.. note::
+   Note that the QuerySet doesn't hit the database unless it needs to.  Even if there are no matches, it'll return an object.
+
+QuerySet like Iterator
+----------------------------------------------------------------
+
+filter with QuerySet:
 
 >>> from meetup.models import *
 >>> Meeting.objects.filter(id=1)
 [<Meeting: Meeting object>]
 
-Because it *is* an iterator
+filter with list:
+
+>>> filter(lambda d: d['id']==1, [{'id':1}, {'id':2}])
+[{'id': 1}]
+
+filter with iterator:
+
+>>> list(ifilter(lambda d: d['id']==1, iter([{'id':1}, {'id':2}])))
+[{'id': 1}]
+
+Because QuerySet *is* an iterator
 ----------------------------------------------------------------
 
 >>> from meetup.models import *
@@ -464,10 +536,19 @@ Because it *is* an iterator
 <class 'django.db.models.query.QuerySet'>
 
 
+.. note::
 
-A query describes what kind of data you want -- one or more Models
+   Both iterators and QuerySets are *lazy*
 
-Commonly in Django we just specify the query then hand the results -- the QuerySet -- directly to a template for rendering
+   In functional programming, we have functions which operate on infinite-length streams.
+
+   With QuerySets, it's assumed we have many thousands of results, but we don't want to fetch all of them at once before returning to caller.
+
+   Database (and Django) does a query, then gives us a few items.  Once that batch is done, QuerySet will ask the database for another batch of results.
+
+   This means that for both iterators and query sets, we can do a
+   little work, then process a batch, without waiting for the entire
+   list of results.
 
 .. note::
 
@@ -490,237 +571,32 @@ Commonly in Django we just specify the query then hand the results -- the QueryS
    
    qs.values(); qs.values_list(); qs.values-list(flat=True)
 
+Can mix and match
+----------------------------------------------------------------
 
+>>> Meeting.objects.all()[0].id
+1
 
-historical
-================================================================
-
-
-QuerySets are Django's way of getting data.
-
-
-
-
-Example: you are interested in making drinks.  As a data object, this is:
-
-class Ingredient(Model):
-
-class Drink(Model):
-
-a
-================
-
-
-A query is a list of filters and modifiers. It's lazy -- converted to SQL when needed. Sometimes a single result is all that's needed
-
->>> m = Meeting.objects.get(id=12)
-<Meeting: Meeting object>
-
-
-More commonly, you're looking for a list of objects matching some criteria.  A QuerySet is the result. Like the query, a QuerySet is also lazy -- it gets executed when needed, and results stream from the database.
-
->>> x = Meeting.objects.filter(name__contains='go')
->>> Meeting.objects.all()
-[<Meeting: Meeting object>]
->>> type( Meeting.objects.all() )
-<class 'django.db.models.query.QuerySet'>
-
-Note that the QuerySet doesn't hit the database unless it needs to.  Even if there are no matches, it'll return an object.
-
->>> type(Meeting.objects.filter(name='java'))
-<class 'django.db.models.query.QuerySet'>
-
-To see if there are any matches, convert the results into a list
-
->>> list(qs)
-[]
-
-This isn't efficient -- Python has to hit the database, do a search, parse each row into a separate Model object, and allocate the space for everything.  And then you just check if it's empty or not!
-
-More efficient: ask the database if there are any matches
-
-
-A *generator* is a stream of data.  QuerySets are similar -- a stream of Model objects
-
-Since it's a stream, one you consume it, it's gone.  Printing is consuming -- thus debugging things with streams can be... interesting.
-
-TODO: fileinput example
-TODO: map/reduce
-TODO: Twitter stream example?
-
-
-
-
-generators
-QuerySet (+ query)
-
-State
-- none*: random()
-- init: open()
-- other: trans = db().requestmany()
-
-
-
-enumerate(iter) 
-
-Iterators can be tricky to work with
-
-- first three elements of a list:
-
->>> range(10)
-[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
->>> range(100)[:3]
-[0, 1, 2]
-
-- first three elements of iterator -- can't use slice operator!
-
->>> xrange(100)[:3]
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-TypeError: sequence index must be integer, not 'slice'
-
-- first three elements of iterator -- use islice
+>>> islice( Meeting.objects.all(), 1).next().id
+1
 
 >>> from itertools import *
-
-# ... to get another iterator!
-
->>> islice(count(10), 3)
-<itertools.islice object at 0x7f9bc54a5d08>
-
-# turn it into a concrete list
-
->>> list(islice(count(10), 3))
-[10, 11, 12]
+>>> islice( Meeting.objects.all(), 1)
+<itertools.islice object at 0x2bb9ec0>
+>>> list(islice( Meeting.objects.all(), 1))
+[<Meeting: Meeting object>]
 
 
->>> f=open('ing.txt')
->>> f
-<open file 'ing.txt', mode 'r' at 0x7f9bc54fe4b0>
+Lists, Iterators, and QuerySets
+----------------------------------------------------------------
 
->>> f[0]
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-TypeError: 'file' object has no attribute '__getitem__'
+.. table:: x
 
->>> islice(f,1)
-<itertools.islice object at 0x7f9bc54a5d60>
->>> list(islice(f,1))
-['whiskey\n']
->>> list(islice(f,1))
-['syrup\n']
-
->>> f.next()
-'bitters\n'
-
-
-
-
-
-page
-================
-
-
-
-Internally, queries are compiled into SQL, but aren't executed until needed
-
-TODO: clarify; queries are dynamic too
-
-qs = Event.objects.filter(pk=3) ; print qs.query
-
-SELECT `event_event`.`id` ...
-FROM `event_event`
-WHERE `event_event`.`id` = 3 
-
-page
-================
-
-q = Event.objects.filter(pk=3).values_list('id') ; print x.query
-SELECT `event_event`.`id` FROM `event_event` WHERE `event_event`.`id` = 3 
-
->>> print q
-[(3L,)]
-
-page
-================
-
-Set operations on QuerySets
-
-.. figure:: /_static/venn.png
-   :class: fill
-
-page
-================
-
->>> q = Event.objects.filter(pk=3) & Event.objects.filter(name__contains='beer')
->>> print q.query
-SELECT `event_event`.`id`, ...
-FROM `event_event`
-WHERE (`event_event`.`id` = 3  AND `event_event`.`name` LIKE BINARY %beer% )
-
-page
-================
-
->>> q = Event.objects.filter(pk=3) | Event.objects.filter(name__icontains='beer') ; print q.query
-SELECT `event_event`.`id`, ...
-FROM `event_event`
-WHERE (`event_event`.`id` = 3  OR `event_event`.`name` LIKE %beer% )
-
-page
-================
-
-An 'if' will evaluate the query, retrieving all the rows, all the fields
-
->>> city_set = City.objects.filter(name="Cambridge")
-# The `if` statement evaluates the queryset.
-if city_set:
-    # We don't need the results of the queryset here, but the
-    # ORM still fetched all the rows!
-    print("At least one city called Cambridge still stands!")
-
-page
-================
-
-If you only want to see if there are *any*, then use exists().  This hits the database, but it's efficient.
-
->>> tree_set = Tree.objects.filter(type="deciduous")
-# The `exists()` check avoids populating the queryset cache.
-if tree_set.exists():
-    # No rows were fetched from the database, so we save on
-    # bandwidth and memory.
-    print("There are still hardwood trees in the world!")
-
-page
-================
-
-Here's the equivalent to qs.exists()
-
-qs = Event.objects.filter(pk=3); qs.query.set_limits(high=1); print qs.query 
-
-SELECT `event_event`.`id`
-FROM `event_event`
-WHERE `event_event`.`id` = 3
-LIMIT 1
-
-page
-================
-
-You can add modifiers 
-
->>> qs = Event.objects.filter(pk=3)
->>> print qs.query
-SELECT `event_event`.`id` FROM `event_event` WHERE `event_event`.`id` = 3 
->>> qs = qs.filter(pk=2)
->>> print qs.query
-SELECT `event_event`.`id` FROM `event_event` WHERE (`event_event`.`id` = 3  AND `event_event`.`id` = 2 )
-
-
-TBD: other databases -- Mongo? flat file?
-
-
-
-
-
+   ===== ===== =====
+   list  iter  qset
+   ===== ===== =====
+   1     2      2
+   ===== ===== =====
 
 
 
@@ -729,6 +605,8 @@ Questions?
 
 .. figure:: /_static/john-bold.jpg
    :class: fill
+
+   john@johntellsall.com
 
 .. note::   CC BY-SA http://www.flickr.com/photos/tamburix/2900909093/
 
