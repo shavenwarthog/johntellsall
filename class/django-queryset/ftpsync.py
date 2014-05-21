@@ -3,7 +3,8 @@
 '''
 ftpsync.py -- transfer local files to FTP server
 
-DO NOT USE -- use lftp command instead
+DO NOT USE -- use lftp command instead, start with 'cd /django-queryset ; mirror -v --reverse -X project --ignore-time --use-cache -X *.pickle -X *.doctree --dry-run'
+
 '''
 # "git ls-tree" from http://stackoverflow.com/questions/1910783/git-1-list-all-files-in-a-branch-2-compare-files-from-different-branch
 
