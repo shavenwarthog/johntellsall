@@ -377,16 +377,16 @@ Iterator Functions
 
 .. py:function:: chain(*iterables)
 
-.. py:function:: ifilter()	pred, seq	elements of seq where pred(elem) is True	ifilter(lambda x: x%2, range(10)) --> 1 3 5 7 9
-.. py:function:: ifilterfalse()	pred, seq	elements of seq where pred(elem) is False	ifilterfalse(lambda x: x%2, range(10)) --> 0 2 4 6 8
-.. py:function:: islice()	seq, [start,] stop [, step]	elements from seq[start:stop:step]	islice('ABCDEFG', 2, None) --> C D E F G
-.. py:function:: imap()	func, p, q, ...	func(p0, q0), func(p1, q1), ...	imap(pow, (2,3,10), (5,2,3)) --> 32 9 1000
-.. py:function:: starmap()	func, seq	func(*seq[0]), func(*seq[1]), ...	starmap(pow, [(2,5), (3,2), (10,3)]) --> 32 9 1000
-.. py:function:: tee()	it, n	it1, it2 , ... itn splits one iterator into n	 
-.. py:function:: takewhile()	pred, seq	seq[0], seq[1], until pred fails	takewhile(lambda x: x<5, [1,4,6,4,1]) --> 1 4
-.. py:function:: izip()	p, q, ...	(p[0], q[0]), (p[1], q[1]), ...	izip('ABCD', 'xy') --> Ax By
-.. py:function:: izip_longest()	p, q, ...	(p[0], q[0]), (p[1], q[1]), ...	izip_longest('ABCD', 'xy', fillvalue='-') --> Ax By C- D-
+.. py:function:: ifilter(f, iter) -> substream of iter
+.. py:function:: islice(iter, num) -> counted items of iter
 
+list(
+
+.. note::
+   .. py:function:: imap(func, p, q) -> f(p), f(q), ...
+
+                    .. py:function:: izip()	p, q, ...	(p[0], q[0]), (p[1], q[1]), ...	izip('ABCD', 'xy') --> Ax By
+                                     .. py:function:: izip_longest()	p, q, ...	(p[0], q[0]), (p[1], q[1]), ...	izip_longest('ABCD', 'xy', fillvalue='-') --> Ax By C- D-
 
 
 
@@ -394,6 +394,7 @@ iter: chain
 ----------------------------------------------------------------
 
 **chain(streams)** gives elements of each stream in order
+Equivalent to **+** for lists.
 
 >>> [1,2]+[3]
 [1, 2, 3]
@@ -409,8 +410,26 @@ iter: chain
 
    stream of objects with state
    lazy vs eager
-
    ****************************************************************
+
+iter: islice
+----------------------------------------------------------------
+
+**islice(stream, num)** -- get counted elements of stream
+Equivalent to slice operator for lists.
+
+>>> list([1,2,3])[:1]
+[2]
+
+>>> from itertools import *
+>>> iter([1,2,3])[:1]
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: 'listiterator' object has no attribute '__getitem__'
+>>> islice(iter([1,2,3]), 2)
+<itertools.islice object at 0x7f429d7de9f0>
+>>> list(islice(iter([1,2,3]), 2))
+[1, 2]
 
 
 Django QuerySets
