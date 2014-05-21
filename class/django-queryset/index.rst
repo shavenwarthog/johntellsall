@@ -2,7 +2,7 @@
 .. Django QuerySets and Functional Programming slides file, created by
    hieroglyph-quickstart on Mon May 12 14:08:05 2014.
 
-Django QuerySets and Functional Programming (Draft)
+Django QuerySets and Functional Programming
 ===================================================
 
 john@johntellsall.com
@@ -13,6 +13,13 @@ THEME
 
 By using techniques from Functional Programming, we can
 make modular, reliable and testable code, faster.
+
+ME
+====
+
+   - Senior dev/server guy; Devops
+   - 15 years experience with Python
+   - first PyCon I went to had 40 people!
 
 .. note::
       Functional Programming <funcprog>
@@ -27,10 +34,10 @@ make modular, reliable and testable code, faster.
    Heisenberg
    ****************************************************************
 
-.. slide:: Three Programming Paradigms
-   :level: 2
 
-   .. figure:: /_static/3-hoodlums-nancy.png
+.. note::   .. figure:: /_static/3-hoodlums-nancy.png
+  .. slide:: Three Programming Paradigms
+   :level: 1
    :class: fill
 
 
@@ -138,8 +145,7 @@ FP: list of functions
     )
 ) )
 
-.. figure:: /_static/girl-with-beads2.jpg
-   :figwidth: 50%
+.. note:: add "happy girl with beads" image
 
 
 .. note::
@@ -162,6 +168,25 @@ FP: list of functions
 
    http://en.wikipedia.org/wiki/Functional_programming
 
+
+Iterators
+================
+
+>>> list([1,2])
+[1, 2]
+>>> iter([1,2])
+<listiterator object at 0x7f429d83c750>
+
+.. note::
+   list are "eager" -- know everything about them all the time
+
+   iterators have a item and next and that's it
+   - Preferred, because they take almost no space
+
+   Million item list can be rough, because they hold all million
+   - have to deal with all items
+
+   Million item iter is no biggie, can proc a few
 
 FP: upcase
 ----------------------------------------------------------------
@@ -240,7 +265,7 @@ Old Primary Functions
    be a sequence or any iterable object; the result is always a
    list.
 
-.. py:function:: reduce(function, iterable[, initializer])
+.. note:: .. py:function:: reduce(function, iterable[, initializer])
 
    Apply function of two arguments cumulatively to the items of iterable, from left to right, so as to reduce the iterable to a single value.
 
@@ -264,7 +289,9 @@ FP: important dataset
 Functional Prog for Better Booze!
 ----------------------------------------------------------------
 
-.. figure:: /_static/bourbon-old-fashioned.jpg
+.. figure:: /_static/Oldfashioned-cocktail.png
+
+   CC PD http://en.wikipedia.org/wiki/File:Oldfashioned-cocktail.png
 
 FP: filter
 ----------------
@@ -437,13 +464,12 @@ Django QuerySets
 
 QuerySets are Django's way of getting and updating data
 
-models.py
-----------------
+.. note:: models.py
 
->>> from django.db import models
-   class Meeting(models.Model):
-    name = models.CharField(max_length=100)
-    meet_date = models.DateTimeField()
+          >>> from django.db import models
+          class Meeting(models.Model):
+          name = models.CharField(max_length=100)
+          meet_date = models.DateTimeField()
 
 QuerySet review
 ----------------------------------------------------------------
@@ -451,35 +477,23 @@ QuerySet review
 <Meeting: Meeting object>
 
 >>> Meeting.objects.get(id=12).__dict__
-{'meet_date': datetime.datetime(2014, 5, 20, 7, 0, tzinfo=<UTC>), '_state': <django.db.models.base.ModelState object at 0x2bd1050>, 'id': 3, 'name': u'LA Django Monthly Meeting'}
+{'meet_date': datetime.datetime(2014, 5, 20, 7, 0, tzinfo=<UTC>),
+'_state': <django.db.models.base.ModelState object at 0x2bd1050>,
+'id': 3, 'name': u'LA Django Monthly Meeting'}
 
-.. note::
-   A query is a list of filters and modifiers. It's lazy -- converted to SQL when needed. Sometimes a single result is all that's needed
-
-   More commonly, you're looking for a list of objects matching some criteria.  A QuerySet is the result. Like the query, a QuerySet is also lazy -- it gets executed when needed, and results stream from the database.
-
-To see if there are any matches, convert the results into a list
-
->>> list(qs)
-[]
-
-This isn't efficient -- Python has to hit the database, do a search, parse each row into a separate Model object, and allocate the space for everything.  And then you just check if it's empty or not!
-
-More efficient: ask the database if there are any matches
+>>> x = Meeting.objects.filter(name__icontains='go')
+>>> for a in x: print a.name
+LA Django Monthly Meeting
 
 
 QuerySet and iterators
 ----------------------------------------------------------------
-
->>> x = Meeting.objects.filter(name__contains='go')
 
 >>> x=Meeting.objects.filter(name='java')
 >>> x
 []
 >>> type(x)
 <class 'django.db.models.query.QuerySet'>
->>> bool(x)
-False
 
 Functional QuerySets
 ================================================================
@@ -492,19 +506,35 @@ Functional QuerySets
 
    . a QuerySet?
 
-QuerySet details
+Empty List
 ----------------------------------------------------------------
+*How can you tell if a list is empty or not?*
 
->>> x=Meeting.objects.filter(name='java')
->>> x
-[]
->>> type(x)
-<class 'django.db.models.query.QuerySet'>
->>> bool(x)
+>>> bool([])
 False
+>>> bool(['beer'])
+True
 
 .. note::
-   Note that the QuerySet doesn't hit the database unless it needs to.  Even if there are no matches, it'll return an object.
+   Lists are *eager* -- always know everything
+
+Empty Iterator
+----------------------------------------------------------------
+*How can you tell if an iterator is empty or not?*
+
+>>> x=iter([1,2])
+>>> bool(x)
+True
+>>> x=iter([])
+>>> bool(x)
+True
+
+.. note::
+   Iterators are *lazy* -- don't know what they contain!
+
+How can you tell if a QuerySet is empty or not?
+================================================================
+
 
 QuerySet like Iterator
 ----------------------------------------------------------------
@@ -535,20 +565,6 @@ Because QuerySet *is* an iterator
 >>> type(Meeting.objects.filter(id=1))
 <class 'django.db.models.query.QuerySet'>
 
-
-.. note::
-
-   Both iterators and QuerySets are *lazy*
-
-   In functional programming, we have functions which operate on infinite-length streams.
-
-   With QuerySets, it's assumed we have many thousands of results, but we don't want to fetch all of them at once before returning to caller.
-
-   Database (and Django) does a query, then gives us a few items.  Once that batch is done, QuerySet will ask the database for another batch of results.
-
-   This means that for both iterators and query sets, we can do a
-   little work, then process a batch, without waiting for the entire
-   list of results.
 
 .. note::
 
@@ -586,18 +602,27 @@ Can mix and match
 >>> list(islice( Meeting.objects.all(), 1))
 [<Meeting: Meeting object>]
 
-
-Lists, Iterators, and QuerySets
+But not always
 ----------------------------------------------------------------
 
-.. table:: x
 
-   ===== ===== =====
-   list  iter  qset
-   ===== ===== =====
-   1     2      2
-   ===== ===== =====
+*How can you tell if a QuerySet is empty or not?*
 
+Use x.exists(), not bool(x) -- more efficient
+
+.. note::
+
+   Both iterators and QuerySets are *lazy*
+
+   In functional programming, we have functions which operate on infinite-length streams.
+
+   With QuerySets, it's assumed we have many thousands of results, but we don't want to fetch all of them at once before returning to caller.
+
+   Database (and Django) does a query, then gives us a few items.  Once that batch is done, QuerySet will ask the database for another batch of results.
+
+   This means that for both iterators and query sets, we can do a
+   little work, then process a batch, without waiting for the entire
+   list of results.
 
 
 Questions?
@@ -608,11 +633,9 @@ Questions?
 
    john@johntellsall.com
 
-.. note::   CC BY-SA http://www.flickr.com/photos/tamburix/2900909093/
-
 
 References
-================
+----------------
 
 Can Your Programming Language Do This? by Joel Spolsky
 
@@ -631,6 +654,3 @@ Using Django querysets effectively by Dave Hall
 http://blog.etianen.com/blog/2013/06/08/django-querysets/
 
 
-Other Topics
-================
-South
