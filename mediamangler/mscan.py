@@ -20,6 +20,34 @@ def scan_files(topdir):
             yield name, path
 
 
+def get_meta(filename):
+    from hachoir_core.error import HachoirError
+    from hachoir_core.cmd_line import unicodeFilename
+    from hachoir_parser import createParser
+    from hachoir_core.tools import makePrintable
+    from hachoir_metadata import extractMetadata
+    from hachoir_core.i18n import getTerminalCharset
+    filename, realname = unicodeFilename(filename), filename
+    parser = createParser(filename, realname)
+    if not parser:
+        print >>sys.stderr, "{}: Unable to parse file".format(filename)
+        return None
+
+    try:
+        metadata = extractMetadata(parser)
+    except HachoirError, err:
+        print "Metadata extraction error: %s" % unicode(err)
+        metadata = None
+    if not metadata:
+        print "Unable to extract metadata"
+        exit(1)
+
+    text = metadata.exportPlaintext()
+    charset = getTerminalCharset()
+    for line in text:
+        print makePrintable(line, charset)
+
+
 def main(topdir):
     def is_boring(name, path):
         return ( name.startswith('.') or 
@@ -30,23 +58,11 @@ def main(topdir):
             continue
         print path
 
-        meta = None
-        try:
-            meta = mutagen.File(path, easy=True)
-        except mutagen.mp4.MP4StreamInfoError:
-            pass
-        try:
-            print '\t{artist}\t{album}'.format(**meta)
-        except KeyError:
-            print '??', meta
+        meta = get_meta(path)
+        print meta
 
 
 if __name__=='__main__':
     main( os.path.expanduser(sys.argv[1]) )
-
-# print(
-#     '\n'.join( scan_files( os.path.expanduser(sys.argv[1]) )
-#                )
-#     )
 
 

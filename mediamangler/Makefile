@@ -1,4 +1,5 @@
-all:
+all test:
+	/usr/bin/python ./mscan.py ~/Music/
 
 tags:
 	ctags-exuberant -e -R --languages=python \

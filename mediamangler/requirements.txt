@@ -1,2 +1,2 @@
-mutagen
 # python=
+hachoir-metadata
