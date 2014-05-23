@@ -3,5 +3,6 @@ all test:
 
 tags:
 	ctags-exuberant -e -R --languages=python \
-	. $(VIRTUAL_ENV)/lib/python*/
+	. /usr/share/pyshared/hachoir*
 	wc -l TAGS
+#	. $(VIRTUAL_ENV)/lib/python*

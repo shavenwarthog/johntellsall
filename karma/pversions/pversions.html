@@ -1,0 +1,22 @@
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">#!/usr/bin/env python</span>
+
+<span style="color: #BA2121; font-style: italic">&#39;&#39;&#39;</span>
+<span style="color: #BA2121; font-style: italic">pversions.py -- search for package version from PyPi</span>
+<span style="color: #BA2121; font-style: italic">&#39;&#39;&#39;</span>
+<span style="color: #408080; font-style: italic"># adapted from pip.commands.SearchCommand</span>
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">sys</span><span style="color: #666666">,</span> <span style="color: #0000FF; font-weight: bold">xmlrpclib</span>
+
+pnames <span style="color: #666666">=</span> sys<span style="color: #666666">.</span>argv[<span style="color: #666666">1</span>:]
+<span style="color: #008000; font-weight: bold">if</span> <span style="color: #AA22FF; font-weight: bold">not</span> pnames:
+    sys<span style="color: #666666">.</span>exit(<span style="color: #BA2121">&#39;Usage: pversions (packagename)...&#39;</span>)
+
+pypi <span style="color: #666666">=</span> xmlrpclib<span style="color: #666666">.</span>ServerProxy(<span style="color: #BA2121">&#39;https://pypi.python.org/pypi&#39;</span>)
+<span style="color: #008000; font-weight: bold">for</span> packagename <span style="color: #AA22FF; font-weight: bold">in</span> (pname<span style="color: #666666">.</span>lower() <span style="color: #008000; font-weight: bold">for</span> pname <span style="color: #AA22FF; font-weight: bold">in</span> pnames):
+    <span style="color: #008000; font-weight: bold">print</span> packagename,<span style="color: #BA2121">&#39;:&#39;</span>
+    exact_hits <span style="color: #666666">=</span> (
+        hit <span style="color: #008000; font-weight: bold">for</span> hit <span style="color: #AA22FF; font-weight: bold">in</span> pypi<span style="color: #666666">.</span>search({<span style="color: #BA2121">&#39;name&#39;</span>: packagename})
+        <span style="color: #008000; font-weight: bold">if</span> hit[<span style="color: #BA2121">&#39;name&#39;</span>]<span style="color: #666666">.</span>lower() <span style="color: #666666">==</span> packagename
+    )
+    <span style="color: #008000; font-weight: bold">print</span> <span style="color: #BA2121">&#39;, &#39;</span><span style="color: #666666">.</span>join( (hit[<span style="color: #BA2121">&#39;version&#39;</span>] <span style="color: #008000; font-weight: bold">for</span> hit <span style="color: #AA22FF; font-weight: bold">in</span> exact_hits) )
+</pre></div>

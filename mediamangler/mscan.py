@@ -6,8 +6,6 @@ mscan.py -- scan media files, print info on each
 
 import os, sys
 
-import mutagen
-
 
 MIN_SIZE = 100 * 1024
 
@@ -33,19 +31,18 @@ def get_meta(filename):
         print >>sys.stderr, "{}: Unable to parse file".format(filename)
         return None
 
-    try:
-        metadata = extractMetadata(parser)
-    except HachoirError, err:
-        print "Metadata extraction error: %s" % unicode(err)
-        metadata = None
-    if not metadata:
-        print "Unable to extract metadata"
-        exit(1)
+    return extractMetadata(parser)
+    # except HachoirError, err:
+    #     print "Metadata extraction error: %s" % unicode(err)
+    #     metadata = None
+    # if not metadata:
+    #     print "Unable to extract metadata"
+    #     exit(1)
 
-    text = metadata.exportPlaintext()
-    charset = getTerminalCharset()
-    for line in text:
-        print makePrintable(line, charset)
+    # text = metadata.exportPlaintext()
+    # charset = getTerminalCharset()
+    # for line in text:
+    #     print makePrintable(line, charset)
 
 
 def main(topdir):
@@ -59,8 +56,8 @@ def main(topdir):
         print path
 
         meta = get_meta(path)
-        print meta
-
+        # print meta
+        
 
 if __name__=='__main__':
     main( os.path.expanduser(sys.argv[1]) )
