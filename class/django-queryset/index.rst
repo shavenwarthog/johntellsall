@@ -189,6 +189,8 @@ efficient list
 File iterator
 ----------------
 
+iterate across a *stream* of strings
+
 .. code-block:: python
 
     f = open('beer.txt')
@@ -201,6 +203,8 @@ File iterator
 
 Database iterator
 --------------------
+
+iterate with a *stream* of rows
 
 .. code-block:: python
 
@@ -216,6 +220,51 @@ Database iterator
     cursor.close()
     conn.close()
 
+List very similar to Iterator
+----------------------------------------------------------------
+
+.. code-block:: python
+
+   for line in open('ing.txt'):
+       print line
+
+   for num in iter([2,4,6,8]):
+       print num
+
+   for num in [2,4,6,8]:
+       print num
+
+   for name in glob.glob('*.txt'):
+       print name
+
+Work with a *stream* of objects
+
+
+
+What can you do with a iterator?
+----------------------------------------------------------------
+
+>>> f = open('ing.txt')
+>>> f.next()
+'# Old Fashioned\n'
+>>> f.next()
+'1.5 oz whiskey\n'
+
+
+What happens at the end?
+----------------------------------------------------------------
+
+>>> f = open('/dev/null')
+>>> f.next()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+StopIteration
+
+>>> iter([]).next()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+StopIteration
+
 List vs Iterator
 ----------------    
 
@@ -223,8 +272,10 @@ List vs Iterator
 feature      list     iterator
 ===========  =======  ==========
 overall      eager    lazy
-size         large    small
-indexable    yes      no
+len(x)       yes      no
+slice        x[:3]    islice(x, 3)
+addition     x + y    chain(x, y)
+has items    if x     no
 easy debug   yes      no
 ===========  =======  ==========
     
