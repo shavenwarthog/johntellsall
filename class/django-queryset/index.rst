@@ -7,6 +7,7 @@ Django QuerySets and Functional Programming
 
 john@johntellsall.com
 
+v2
 
 THEME
 ================
@@ -168,18 +169,68 @@ FP: list of functions
 
 
 Iterators
-================
+----------------
+
+An iterator is a *stream* of data -- sort of a restricted, very
+efficient list
 
 >>> list([1,2])
 [1, 2]
+
 >>> iter([1,2])
 <listiterator object at 0x7f429d83c750>
 
 .. note::
-   list are "eager" -- know everything about them all the time
 
    iterators have a item and next and that's it
    - Preferred, because they take almost no space
+
+
+File iterator
+----------------
+
+.. code-block:: python
+
+    f = open('beer.txt')
+    for line in f:
+        print line
+
+.. note::
+
+   you already use iterators
+
+Database iterator
+--------------------
+
+.. code-block:: python
+
+    import os, sqlite3
+    conn = sqlite3.connect('recipe')
+    cursor = conn.cursor()
+    
+    cursor.execute("""select name from ingridient""")
+    
+    for row in cursor.fetchall():
+        print(row)
+    
+    cursor.close()
+    conn.close()
+
+List vs Iterator
+----------------    
+
+===========  =======  ==========
+feature      list     iterator
+===========  =======  ==========
+overall      eager    lazy
+size         large    small
+indexable    yes      no
+easy debug   yes      no
+===========  =======  ==========
+    
+.. note::
+
+   List are "eager" -- know everything about them all the time
 
    Million item list can be rough, because they hold all million
    - have to deal with all items
