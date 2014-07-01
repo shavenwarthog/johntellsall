@@ -4,6 +4,10 @@ import logging, multiprocessing, random, time
 
 import matplotlib.pyplot as plt
 
+# XXXXX
+plt.ion()
+plt.plot([1,2,3,4], 'ro')
+
 
 def producer(q):
     mylog = multiprocessing.get_logger()
@@ -14,30 +18,29 @@ def producer(q):
 
 def plotter(q):
     mylog = multiprocessing.get_logger()
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
-    x,y = [],[]
+    mylog.info('start')
+    data = []
+    fig, ax = plt.subplots()
     for point in iter(q.get, None):
-        mylog.debug('point %s', point)
-        x.append( point[0] )
-        y.append( point[1] )
-        ax.plot(x, y, 'ro')
+        mylog.info('point %s', point)
+        data.append( point )
+        ax.plot(data, 'ro')
         fig.canvas.draw()
 
 
 def main():
     mylog = multiprocessing.log_to_stderr(
-        level=logging.DEBUG
+        level=logging.INFO
         )
     mylog.info('setup')
     inq = multiprocessing.Queue()
 
     procs = [
         multiprocessing.Process(
-            target=producer, args=(inq,),
+            target=producer, args=(inq,), name='producer',
         ),
         multiprocessing.Process(
-            target=plotter, args=(inq,),
+            target=plotter, args=(inq,), name='plotter',
         ),
     ]
 

@@ -1,4 +1,4 @@
-all:
+all:	jslides
 
 include dev.mk
 include hieroglyph.mak
@@ -18,11 +18,4 @@ jslides:
 
 # 	$(SPHINXBUILD) -b slides $(ALLSPHINXOPTS) $(BUILDDIR)/slides
 
-# TODO: ?? --only-newer 
-# NOTE: using 'jta_sync' user, whose homedir is /class/
-sync:
-	exit 1
-	lftp \
-	-e 'cd /django-queryset ; mirror -v --reverse -X project --ignore-time --use-cache -X *.pickle -X *.doctree --dry-run' \
-	jta
 
