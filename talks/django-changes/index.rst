@@ -67,7 +67,8 @@ ME
 
 Python 3.2, 3.3 supported
 simplified app/project templates
-deployment checklist: https://docs.djangoproject.com/en/dev/howto/deployment/checklist/
+
+`deployment checklist <https://docs.djangoproject.com/en/dev/howto/deployment/checklist/>`_
 
 database
 	better transactions
@@ -85,14 +86,15 @@ testing changes
 	assertNumQueries() 
 	new runner: DiscoverRunner
 
+
 .. note:
 
 check: make sure current settings.py compatible with current version
 of Django
 
    1.6: 11/2013
-
    1.6.5: 5/2014
+   1.6.6: ? (bugfixes)
 
 1.7 Changes (*upcoming*)
 ----------------------------------------------------------------
@@ -114,11 +116,21 @@ test
 	! LiveServerTestCase, for Selenium
 
 ? update_or_create
+
 advanced
 	savepoints
 	RSS/Atom syndication https://docs.djangoproject.com/en/dev/ref/contrib/syndication/#module-django.contrib.syndication
+
 proxy model?
 
+1.8 Changes (*upcoming*)
+----------------------------------------------------------------
+
+!
+
+.. notes:
+
+patterns() deprecated!
 
 Questions?
 ================
@@ -131,4 +143,8 @@ Questions?
 
 References
 ----------------
+
+
+https://docs.djangoproject.com/en/dev/releases/
+-----------------------------------------------
 

@@ -11,7 +11,7 @@ last.out:
 tags:
 	ctags-exuberant -e -R \
 	. \
-	/usr/lib/python2.7/{multiprocessing,BaseHTTPServer,resource,subprocess,threading,unittest}* \
+	/usr/lib/python2.7/{collections,multiprocessing,BaseHTTPServer,resource,subprocess,threading,unittest}* \
 	/usr/share/pyshared/paramiko/ \
 	$(VIRTUAL_ENV)/lib/python2.7/site-packages/requests*
 	wc -l TAGS
