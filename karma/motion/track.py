@@ -583,12 +583,9 @@ class Target:
 		print "Got %d frames. %.1f s. %f fps." % ( frame_count, time_delta, processed_fps )
 		
 if __name__=="__main__":
-	t = Target()
-#	import cProfile
-#	cProfile.run( 't.run()' )
-	t.run()
-
-
-
-
-
+    t = Target()
+    if 1:
+        import cProfile
+        cProfile.run( 't.run()' )
+    else:
+        t.run()
