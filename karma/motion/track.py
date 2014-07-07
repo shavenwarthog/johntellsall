@@ -36,8 +36,6 @@ right = 1
 
 # Cam ID for changing camera
 #camID = 0
-# gui 0 = without gui, 1 = witch gui
-#gui = 0
 # inputfile for videofile instead webcam, outputfile for writing video file
 #inputfile = ''
 #outputfile = ''
@@ -106,8 +104,7 @@ class Target:
 
                 # Cam ID for changing camera
                 camID = 0
-                # gui 0 = without gui, 1 = witch gui
-                self.gui = 0
+                self.gui = False
                 # inputfile for videofile instead webcam, outputfile for writing video file
                 inputfile = ''
                 outputfile = ''
@@ -133,7 +130,7 @@ class Target:
                     elif opt in ("-i", "--ifile"):
                         inputfile = arg
                     elif opt in ("--gui"):
-                        self.gui = 1
+                        self.gui = True
                     elif opt in ("-o", "--ofile"):
                         outputfile = arg
                 print 'CamID is "', camID
@@ -218,7 +215,7 @@ class Target:
 		
 		while True:
 
-			if self.gui == 1:
+			if self.gui:
                             #get max targets from trackbar
                             self.max_targets = cv2.getTrackbarPos('Maxtargets','Target')
 
@@ -536,11 +533,11 @@ class Target:
 			if chr(c) == 'd':
 				image_index = ( image_index + 1 ) % len( image_list )
 				
-			if self.gui == 1:
+			if self.gui:
                             image_index = cv2.getTrackbarPos('Display','Target')
                             
 			image_name = image_list[ image_index ]
-			if self.gui == 1:
+			if self.gui:
                             # Display frame to user
                             if image_name == "camera":
                                     image = camera_image
