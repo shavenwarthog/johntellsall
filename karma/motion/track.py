@@ -93,11 +93,6 @@ def detect_faces( image, haar_cascade, mem_storage ):
 	faces = []
 	image_size = cv.GetSize( image )
 
-	#faces = cv.HaarDetectObjects(grayscale, haar_cascade, storage, 1.2, 2, cv.CV_HAAR_DO_CANNY_PRUNING, (20, 20) )
-	#faces = cv.HaarDetectObjects(image, haar_cascade, storage, 1.2, 2, cv.CV_HAAR_DO_CANNY_PRUNING )
-	#faces = cv.HaarDetectObjects(image, haar_cascade, storage )
-	#faces = cv.HaarDetectObjects(image, haar_cascade, mem_storage, 1.2, 2, cv.CV_HAAR_DO_CANNY_PRUNING, ( 16, 16 ) )
-	#faces = cv.HaarDetectObjects(image, haar_cascade, mem_storage, 1.2, 2, cv.CV_HAAR_DO_CANNY_PRUNING, ( 4,4 ) )
 	faces = cv.HaarDetectObjects(image, haar_cascade, mem_storage, 1.2, 2, cv.CV_HAAR_DO_CANNY_PRUNING, ( image_size[0]/10, image_size[1]/10) )
 	
 	for face in faces:
@@ -120,15 +115,6 @@ class Target:
                 self.max_targets = 3
                 self.targets = []
 
-                # Initiate servo controller
-##                try:
-##                    self.servo = maestro.Controller()
-##                    print 'Servo controller initialized'
-##                except:
-##                    print '\033[91m Servo initialation failed \033[0m'
-##                    print '\033[91m Start with Sudo / Admin rights \033[0m'
-
-                
                 try:
                     opts, args = getopt.getopt(sys.argv[1:],"hic:o:",["help","gui","camID=","ifile=","ofile="])
                 except getopt.GetoptError:
@@ -168,40 +154,22 @@ class Target:
 			self.capture = cv.CaptureFromCAM(camID)
 			cv.SetCaptureProperty( self.capture, cv.CV_CAP_PROP_FRAME_WIDTH, 640 );
 			cv.SetCaptureProperty( self.capture, cv.CV_CAP_PROP_FRAME_HEIGHT, 480 );
-			#cv.SetCaptureProperty( self.capture, cv.CV_CAP_PROP_FRAME_WIDTH, 320 );
-			#cv.SetCaptureProperty( self.capture, cv.CV_CAP_PROP_FRAME_HEIGHT, 240 );
 			frame = cv.QueryFrame(self.capture)
 			frame_size = cv.GetSize(frame)
 			print frame_size
 			
 			self.writer = None
-			#self.writer = cv.CreateVideoWriter("/dev/shm/test1.mp4", cv.CV_FOURCC('D', 'I', 'V', 'X'), fps, frame_size, is_color )
-			#self.writer = cv.CreateVideoWriter("test2.mpg", cv.CV_FOURCC('P', 'I', 'M', '1'), fps, frame_size, is_color )
-			#self.writer = cv.CreateVideoWriter("test3.mp4", cv.CV_FOURCC('D', 'I', 'V', 'X'), fps, cv.GetSize(frame), is_color )
-			#self.writer = cv.CreateVideoWriter("test4.mpg", cv.CV_FOURCC('P', 'I', 'M', '1'), fps, (320, 240), is_color )
-			
-			# These both gave no error message, but saved no file:
-			###self.writer = cv.CreateVideoWriter("test5.h263i", cv.CV_FOURCC('I', '2', '6', '3'), fps, cv.GetSize(frame), is_color )
-			###self.writer = cv.CreateVideoWriter("test6.fli",   cv.CV_FOURCC('F', 'L', 'V', '1'), fps, cv.GetSize(frame), is_color )
-			# Can't play this one:
-			###self.writer = cv.CreateVideoWriter("test7.mp4",   cv.CV_FOURCC('D', 'I', 'V', '3'), fps, cv.GetSize(frame), is_color )
-
 		# 320x240 15fpx in DIVX is about 4 gigs per day.
 
 		frame = cv.QueryFrame(self.capture)
-		if self.gui == 1:
+		if self.gui:
                     cv.NamedWindow("Target", 1)
-                    #cv.NamedWindow("Target2", 1)
-                    #create Trackbars for adjustment
-                    cv2.createTrackbar('Maxtargets','Target',3,10,nothing)
+                    cv2.createTrackbar('Maxtargets','Target',1,10,nothing)
                     cv2.createTrackbar('Display','Target',3,4,nothing)
 		
 
 	def run(self):
 		# Initialize
-		#log_file_name = "tracker_output.log"
-		#log_file = file( log_file_name, 'a' )
-		
 		frame = cv.QueryFrame( self.capture )
 		frame_size = cv.GetSize( frame )
 		
@@ -246,13 +214,6 @@ class Target:
 		### Face detection stuff
 		#haar_cascade = cv.Load( 'haarcascades/haarcascade_frontalface_default.xml' )
 		haar_cascade = cv.Load( 'haarcascades/haarcascade_frontalface_alt.xml' )
-		#haar_cascade = cv.Load( 'haarcascades/haarcascade_frontalface_alt2.xml' )
-		#haar_cascade = cv.Load( 'haarcascades/haarcascade_mcs_mouth.xml' )
-		#haar_cascade = cv.Load( 'haarcascades/haarcascade_eye.xml' )
-		#haar_cascade = cv.Load( 'haarcascades/haarcascade_frontalface_alt_tree.xml' )
-		#haar_cascade = cv.Load( 'haarcascades/haarcascade_upperbody.xml' )
-		#haar_cascade = cv.Load( 'haarcascades/haarcascade_profileface.xml' )
-		
 		
 		
 		while True:
