@@ -555,7 +555,7 @@ class Target:
                                     cv.PutText( image, "Motion Mask", text_coord, text_font, text_color )
                             elif image_name == "faces":
                                     # Do face detection
-                                    detect_faces( camera_image, haar_cascade, mem_storage )				
+                                    detect_faces( camera_image, haar_cascade, mem_storage )             
                                     image = camera_image  # Re-use camera image here
                                     cv.PutText( image, "Face Detection", text_coord, text_font, text_color )
                             
