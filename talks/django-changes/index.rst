@@ -36,28 +36,37 @@ ME
 
    look up perms in templates:
 
-   ``{% if 'someapp.someperm' in perms %}``
+      ``{% if 'someapp.someperm' in perms %}``
 
 *better with JavaScript*
 
    ``{% verbatim %}`` template tag for JS
 
+1.5 Changes #2
+----------------
+
 *other goodies*
+
    ``{% url "myview" %}``
 
-   ``QuerySet.bulk_create()`` now has a batch_size 
+   `QuerySet.bulk_create() <https://docs.djangoproject.com/en/dev/ref/models/querysets/#django.db.models.query.QuerySet.bulk_create>`_ now has a batch_size 
 
-   ? New view variable in class-based views context
-   - https://docs.djangoproject.com/en/dev/ref/utils/#django.utils.timezone.localtime
+   `django.utils.timezone <https://docs.djangoproject.com/en/dev/ref/utils/#django.utils.timezone.localtime>`_ helps convert aware datetimes between time zones
+   
 
 .. note::
 
    1.5: 2/2013
 
+   {% load url from future %} 
+   {% url myview %} => {% url "myview" %}
+
+   ? New view variable in class-based views context
+
    “ecosystem of pluggable components”
    https://docs.djangoproject.com/en/dev/ref/contrib/messages/#module-django.contrib.messages
 
-   - StreamingHttpResponse: only useful for lots of data, not chat; not recommended https://docs.djangoproject.com/en/dev/ref/request-response/#django.http.StreamingHttpResponse
+   - StreamingHttpResponse: only useful for lots of data, not chat; https://docs.djangoproject.com/en/dev/ref/request-response/#django.http.StreamingHttpResponse
 
    Deployment Checklist https://docs.djangoproject.com/en/dev/howto/deployment/checklist/
 
