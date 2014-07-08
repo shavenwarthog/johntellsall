@@ -74,18 +74,21 @@ ME
 1.6 Changes (*latest*)
 ----------------------------------------------------------------
 
-Python 3.2, 3.3 supported
+*big workflow benefits*
 
-simplified app/project templates
+	simplified app/project templates
 
-`deployment checklist <https://docs.djangoproject.com/en/dev/howto/deployment/checklist/>`_
+	`deployment checklist <https://docs.djangoproject.com/en/dev/howto/deployment/checklist/>`_
 
-database 
+*better database support*
+
 	better transactions
 
 	`persistent connections <https://docs.djangoproject.com/en/dev/ref/databases/#caveats>`_ (disabled by default!)
 
 .. note::
+
+   Python 3.2, 3.3 supported
 
    Database-level autocommit is now turned on by default. This makes transaction handling more explicit and should improve performance. 
 
@@ -98,11 +101,13 @@ database
 ----------------------------------------------------------------
 
 perks
+
 	``manage.py check``
 
 	``validate_email()``
 
 testing changes
+
 	discovery of "test*.py" tests in any module
 
 	`assertQuerysetEqual() <https://docs.djangoproject.com/en/dev/topics/testing/tools/#django.test.TransactionTestCase.assertQuerysetEqual>`_
@@ -132,30 +137,67 @@ testing changes
 
 1.7 Changes (*upcoming*)
 ----------------------------------------------------------------
-	Python 3.4 support
-	schema migrations(!!)
+
+*the biggie*
+
+	**schema migrations(!!)**
+
+*more general*
+
 	app-model link broken
-	better custom QuerySets (QuerySet methods from the Manager)
-	‘check’ framework
-	? cursor as context manager
-	? custom lookups and transforms
+
+	`better custom QuerySets <https://docs.djangoproject.com/en/dev/releases/1.7/#calling-custom-queryset-methods-from-the-manager>`_
+
+	cursor as context manager
+
+	custom lookups and transforms
+
+.. note::
+
+   c = connection.cursor()
+   try:
+   c.execute(...)
+   finally:
+   c.close()
+
+   "check" for system checks
+
+	Python 3.4 support
+
+    (QuerySet methods from the Manager)
+
+
+1.7 Changes #2
+----------------------------------------------------------------
 	
-perks
+*nice perks*
+
 	``permission_required()`` now takes multiple perms
-	``send_mail()`` allows HTML in addition to plaintext; accepts timeout
+
+	``send_mail()`` allows HTML + plaintext; accepts timeout
+
 	runserver uses inotify
+
 	``JsonResponse``
-test
+
+*test*
+
 	assertNumQueries dumps out queries!
+
 	! LiveServerTestCase, for Selenium
+
+1.7 Changes #3
+----------------------------------------------------------------
 
 ? update_or_create
 
 advanced
-	savepoints
-	RSS/Atom syndication https://docs.djangoproject.com/en/dev/ref/contrib/syndication/#module-django.contrib.syndication
 
-proxy model?
+	savepoints
+
+	`RSS/Atom syndication <https://docs.djangoproject.com/en/dev/ref/contrib/syndication/#module-django.contrib.syndication>`_
+
+    proxy model?
 
 1.8 Changes (*upcoming*)
 ----------------------------------------------------------------
@@ -178,7 +220,7 @@ Questions?
 References
 ----------------
 
+`Django Releases <https://docs.djangoproject.com/en/dev/releases/>`_
 
-https://docs.djangoproject.com/en/dev/releases/
 -----------------------------------------------
 
