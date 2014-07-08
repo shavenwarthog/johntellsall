@@ -75,35 +75,60 @@ ME
 ----------------------------------------------------------------
 
 Python 3.2, 3.3 supported
+
 simplified app/project templates
 
 `deployment checklist <https://docs.djangoproject.com/en/dev/howto/deployment/checklist/>`_
 
-database
+database 
 	better transactions
-	persistent connections (disabled by default!)
-	QuerySet methods first() and last() 
-	?: queryset.none()
+
+	`persistent connections <https://docs.djangoproject.com/en/dev/ref/databases/#caveats>`_ (disabled by default!)
+
+.. note::
+
+   Database-level autocommit is now turned on by default. This makes transaction handling more explicit and should improve performance. 
+
+	?: queryset.none() is an EmptyQuerySet
+
+	QuerySet methods `first()` and `last()`
+
+
+1.6 Changes #2
+----------------------------------------------------------------
 
 perks
-	“manage.py check” 
-	validate_email() 
+	``manage.py check``
+
+	``validate_email()``
 
 testing changes
-	discovery of tests in any module
-	(assertQuerysetEqual)
+	discovery of "test*.py" tests in any module
+
+	`assertQuerysetEqual() <https://docs.djangoproject.com/en/dev/topics/testing/tools/#django.test.TransactionTestCase.assertQuerysetEqual>`_
+
 	assertNumQueries() 
+
+.. note::
+
+	discovery of "test*.py" tests in any module, rather than just in INSTALLED_APPS
+
+    check: make sure current settings.py compatible with current
+    version of Django
+
+    1.6: 11/2013
+    1.6.5: 5/2014
+    1.6.6: ? (bugfixes)
+
+    In addition, the test labels provided to ./manage.py test to
+    nominate specific tests to run must now be full Python dotted paths
+    (or directory paths), rather than
+    applabel.TestCase.test_method_name pseudo-paths. This allows
+    running tests located anywhere in your codebase, rather than only
+    in INSTALLED_APPS. For more details, see Testing in Django.
+
 	new runner: DiscoverRunner
 
-
-.. note:
-
-check: make sure current settings.py compatible with current version
-of Django
-
-   1.6: 11/2013
-   1.6.5: 5/2014
-   1.6.6: ? (bugfixes)
 
 1.7 Changes (*upcoming*)
 ----------------------------------------------------------------
