@@ -184,20 +184,25 @@ testing changes
 
 	assertNumQueries dumps out queries!
 
-	! LiveServerTestCase, for Selenium
+	`LiveServerTestCase <https://docs.djangoproject.com/en/1.7/topics/testing/tools/#django.test.LiveServerTestCase>`_, for Selenium
 
 1.7 Changes #3
 ----------------------------------------------------------------
 
-? update_or_create
+	`update_or_create() <https://docs.djangoproject.com/en/dev/ref/models/querysets/#django.db.models.query.QuerySet.update_or_create>`_
 
 advanced
 
-	savepoints
+	`savepoints <https://docs.djangoproject.com/en/dev/topics/db/transactions/#savepoints>`_
 
 	`RSS/Atom syndication <https://docs.djangoproject.com/en/dev/ref/contrib/syndication/#module-django.contrib.syndication>`_
 
-    proxy model?
+.. note::
+
+   savepoints lets you roll back part of a transaction
+
+   proxy model: Model with subclass adding Python-only stuff
+
 
 1.8 Changes (*upcoming*)
 ----------------------------------------------------------------
