@@ -13,7 +13,8 @@ INSTALL:
 import sys
 sys.path.insert(0, '/usr/lib/python2.7/dist-packages/') # scipy
 
-import functools, itertools, os, random, subprocess, time
+import functools, itertools, json, logging, os
+import random, subprocess, time
 
 import hyperopt
 hp = hyperopt.hp
@@ -45,6 +46,9 @@ def p_sample(conc, elapsed):
         conc, elapsed, elapsed/conc,
         )
 
+
+def write_header(info, outf):
+    print >>outf, '# {}'.format( json.dumps(info) )
 
 # TODO: use csv module?
 def write_sample(conc, elapsed, outf):
@@ -118,17 +122,28 @@ def objective(concurrency, sample, outf):
 
 
 def main():
-    max_evals = 25               # TODO: make more flexible
-    sample = get_sample(batch_size=10) # TODO: make more flexible
+    logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
+
+    # TODO: make more flexible
+    batch_size = 20
+    max_evals = 10
+
+    sample = get_sample(batch_size=batch_size)
     num_procs = get_numprocs_fibonacci(sample['batch_size'])
+    outf = open('optimize.dat', 'w') # TODO: make more flexible
 
     print '{} source files, sampled {} at a time'.format(
         len(sample['data']), sample['batch_size'],
     )
     print 'processes:', num_procs
     p_title()
+    write_header(
+        info=dict(max_evals=max_evals, 
+                  batch_size=batch_size, 
+                  num_procs=num_procs),
+        outf=outf,
+        )
 
-    outf = open('optimize.dat', 'w') # TODO: make more flexible
     # write_title(
 
     # minimize the time taken to process batch of files
@@ -141,11 +156,18 @@ def main():
         algo=hyperopt.tpe.suggest, 
         max_evals=max_evals,
         )
+    print 'best:',best
 
+    best_val = hyperopt.space_eval(space, best)
     print 'ANSWER: for files {} at a time, do {} jobs in parallel'.format(
         sample['batch_size'],
-        hyperopt.space_eval(space, best),
+        best_val,
     )
+    print >>outf, '# best: {} ({})'.format(
+        best_val,
+        best,
+        )
+    outf.close()
 
 
 if __name__=='__main__':
