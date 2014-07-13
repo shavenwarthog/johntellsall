@@ -139,7 +139,7 @@ def objective(concurrency, sample, cmd_type, outf):
 
     # optimize for fastest *per-task* time
     return dict(
-        status='ok',
+        status=hyperopt.STATUS_OK,
         loss=elapsed/concurrency,
         )
 
