@@ -41,5 +41,12 @@ set grid ytics lc rgb "#C0C0C0"
 # Manual set the Y-axis range
 # set yrange [100000 to 300000]
 
+set style line 1 lc rgb '#0060ad' lt 1 lw 2 pt 7 ps 1.5   # --- blue
 
-plot "optimize.dat" using 1:($2/$1) with points
+# f(x)= a*x**b + c*x + y0
+# fit f(x) 'optimize.dat' via a,b,c,y0
+f(x)= a*x + y0
+fit f(x) 'optimize.dat' via a,y0
+
+plot "optimize.dat" using 1:($2/$1) with points#  ls 1
+# , f(x) with lines

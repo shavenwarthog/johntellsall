@@ -49,6 +49,8 @@ def p_sample(conc, elapsed):
 
 def write_header(info, outf):
     print >>outf, '# {}'.format( json.dumps(info) )
+    print >>outf, '# CONC\tELAPSED'
+
 
 # TODO: use csv module?
 def write_sample(conc, elapsed, outf):
@@ -56,6 +58,12 @@ def write_sample(conc, elapsed, outf):
         conc, elapsed
         )
 
+
+def write_footer(best_val, best, outf):
+    print >>outf, '# best: {} ({})'.format(
+        best_val,
+        best,
+        )
 
 def fibonacci():
     # skip 0, 1
@@ -125,12 +133,12 @@ def main():
     logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
     # TODO: make more flexible
-    batch_size = 20
-    max_evals = 10
+    batch_size = 5
+    max_evals = 50
+    outf = open('optimize.dat', 'w')
 
     sample = get_sample(batch_size=batch_size)
     num_procs = get_numprocs_fibonacci(sample['batch_size'])
-    outf = open('optimize.dat', 'w') # TODO: make more flexible
 
     print '{} source files, sampled {} at a time'.format(
         len(sample['data']), sample['batch_size'],
@@ -144,8 +152,6 @@ def main():
         outf=outf,
         )
 
-    # write_title(
-
     # minimize the time taken to process batch of files
     space = hp.choice(
         'concurrency', num_procs
@@ -156,17 +162,13 @@ def main():
         algo=hyperopt.tpe.suggest, 
         max_evals=max_evals,
         )
-    print 'best:',best
 
     best_val = hyperopt.space_eval(space, best)
     print 'ANSWER: for files {} at a time, do {} jobs in parallel'.format(
         sample['batch_size'],
         best_val,
     )
-    print >>outf, '# best: {} ({})'.format(
-        best_val,
-        best,
-        )
+    write_footer(best_val, best, outf)
     outf.close()
 
 
