@@ -9,6 +9,18 @@ INSTALL:
 '''
 # TODO: allow ^C interrupt in objective()
 
+# DEFINITIONS:
+# - proc: process
+# - task: single proc running single command on single file
+# - batch: many tasks, running <concurrency> procs at a time
+#
+# Concurrency is roughly "pool size".  A proc doesn't process multiple
+# files at a time; a list of files is processed one per process, with
+# N procs running at once.
+#
+# Optimize over... TODO
+
+
 # TODO: clean up
 import sys
 sys.path.insert(0, '/usr/lib/python2.7/dist-packages/') # scipy
@@ -120,7 +132,7 @@ def format_command(cmd_type, paths, concurrency):
 
 def objective(concurrency, sample, cmd_type, outf):
     '''
-    run several jobs in parallel, return elapsed clock time
+    run several jobs in parallel, return info
     '''
     paths = random.sample(
         sample['data'], sample['batch_size'],
@@ -137,7 +149,7 @@ def objective(concurrency, sample, cmd_type, outf):
     p_sample(concurrency, elapsed)
     write_sample(concurrency, elapsed, outf)
 
-    # optimize for fastest *per-task* time
+    # optimize for fastest *per-proc* time
     return dict(
         status=hyperopt.STATUS_OK,
         loss=elapsed/concurrency,
