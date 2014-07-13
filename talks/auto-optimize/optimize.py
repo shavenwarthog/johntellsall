@@ -54,8 +54,8 @@ def write_header(info, outf):
 
 # TODO: use csv module?
 def write_sample(conc, elapsed, outf):
-    print >> outf, '{}\t{}'.format(
-        conc, elapsed
+    print >> outf, '{}\t{}\t{}'.format(
+        conc, elapsed, elapsed/conc,
         )
 
 
@@ -136,7 +136,12 @@ def objective(concurrency, sample, cmd_type, outf):
     elapsed = time.time() - start
     p_sample(concurrency, elapsed)
     write_sample(concurrency, elapsed, outf)
-    return elapsed
+
+    # optimize for fastest *per-task* time
+    return dict(
+        status='ok',
+        loss=elapsed/concurrency,
+        )
 
 
 def parse_opts():
@@ -151,9 +156,6 @@ def parse_opts():
         '--max_evals', type=int, default=15,
         help='') # TODO
     parser.add_argument('--verbose', '-v', action='count')
-    # parser.add_argument(
-    #     '--output', type=file, default=
-    #     help='') # TODO
     return parser.parse_args()
 
 
