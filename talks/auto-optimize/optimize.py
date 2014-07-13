@@ -13,8 +13,8 @@ INSTALL:
 import sys
 sys.path.insert(0, '/usr/lib/python2.7/dist-packages/') # scipy
 
-import functools, itertools, json, logging, os
-import random, subprocess, time
+import argparse, functools, itertools, json, logging
+import os, random, subprocess, time
 
 import hyperopt
 hp = hyperopt.hp
@@ -22,7 +22,7 @@ hp = hyperopt.hp
 
 def get_sample(batch_size):
     """
-    return large dataset, and batch size to optimize
+    return large dataset and batch size to optimize
     """
     sample = dict(
         batch_size=batch_size,
@@ -104,21 +104,31 @@ def get_numprocs_traditional():
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 
-def objective(concurrency, sample, outf):
+def format_command(cmd_type, paths, concurrency):
+    if cmd_type == 'pyflakes':
+        return 'echo {} | xargs -n1 -P{} pyflakes 2> /dev/null'.format(
+            ' '.join(paths),
+            concurrency,
+        )
+    elif cmd_type == 'pylint':
+        return 'echo {} | xargs -n1 -P{} pyflakes 2> /dev/null'.format(
+            ' '.join(paths),
+            concurrency,
+        )
+    raise KeyError(cmd_type)
+
+
+def objective(concurrency, sample, cmd_type, outf):
     '''
     run several jobs in parallel, return elapsed clock time
     '''
     paths = random.sample(
         sample['data'], sample['batch_size'],
     )
-    cmd = 'echo {} | xargs -n1 -P{} pyflakes 2> /dev/null'.format(
-        ' '.join(paths),
-        concurrency,
-        )
     start = time.time()
     # ignore Pyflakes warnings
     _status = subprocess.call(
-        cmd, 
+        format_command(cmd_type, paths, concurrency),
         shell=True, 
         stderr=open(os.devnull,'w'),
         stdout=open(os.devnull,'w'),
@@ -129,15 +139,35 @@ def objective(concurrency, sample, outf):
     return elapsed
 
 
+def parse_opts():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '--batch_size', type=int, default=5,
+        help='') # TODO
+    parser.add_argument(
+        '--cmd_type', type=str, default='pyflakes',
+        help='') # TODO
+    parser.add_argument(
+        '--max_evals', type=int, default=15,
+        help='') # TODO
+    parser.add_argument('--verbose', '-v', action='count')
+    # parser.add_argument(
+    #     '--output', type=file, default=
+    #     help='') # TODO
+    return parser.parse_args()
+
+
 def main():
-    logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
+    opts = parse_opts()
+    print opts.__dict__
+
+    if opts.verbose:
+        logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
     # TODO: make more flexible
-    batch_size = 5
-    max_evals = 50
     outf = open('optimize.dat', 'w')
 
-    sample = get_sample(batch_size=batch_size)
+    sample = get_sample(batch_size=opts.batch_size)
     num_procs = get_numprocs_fibonacci(sample['batch_size'])
 
     print '{} source files, sampled {} at a time'.format(
@@ -146,8 +176,8 @@ def main():
     print 'processes:', num_procs
     p_title()
     write_header(
-        info=dict(max_evals=max_evals, 
-                  batch_size=batch_size, 
+        info=dict(max_evals=opts.max_evals,
+                  batch_size=sample['batch_size'],
                   num_procs=num_procs),
         outf=outf,
         )
@@ -157,10 +187,13 @@ def main():
         'concurrency', num_procs
         )
     best = hyperopt.fmin(
-        functools.partial(objective, sample=sample, outf=outf),
+        functools.partial(
+            objective, sample=sample, outf=outf,
+            cmd_type=opts.cmd_type,
+        ),
         space,
         algo=hyperopt.tpe.suggest, 
-        max_evals=max_evals,
+        max_evals=opts.max_evals,
         )
 
     best_val = hyperopt.space_eval(space, best)
