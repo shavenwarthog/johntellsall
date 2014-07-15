@@ -10,9 +10,10 @@ INSTALL:
 # TODO: allow ^C interrupt in objective()
 
 # DEFINITIONS:
-# - proc: process
-# - task: single proc running single command on single file
-# - batch: many tasks, running <concurrency> procs at a time
+# - input: file path
+# - proc: process; a worker that runs a single input then exits
+# - batch: many inputs, running <pool size> procs at a time
+# - batch size: how many inputs to process (per trial)
 #
 # Concurrency is roughly "pool size".  A proc doesn't process multiple
 # files at a time; a list of files is processed one per process, with

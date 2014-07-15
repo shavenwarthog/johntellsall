@@ -15,9 +15,9 @@ set nokey
 set boxwidth 0.4
 set style fill solid 1.00
 
-set title "Optimal Procs"
-set xlabel "# Procs"
-set ylabel "Seconds per Task"
+set title "Optimal Pool Size"
+set xlabel "Pool Size (procs)"
+set ylabel "Seconds per Proc"
 
 # Rotate X labels and get rid of the small striped at the top (nomirror)
 set xtics nomirror rotate by -45
