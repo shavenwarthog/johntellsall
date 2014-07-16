@@ -16,3 +16,19 @@ f(x) with lines lt rgb "#ff00ff" title "Approximation"
 
 
 https://google-developers.appspot.com/chart/interactive/docs/quick_start
+
+interactive testing!
+https://code.google.com/apis/ajax/playground/?type=visualization#bar_chart
+
+
+# XXXX: no
+pip install gviz_data_table
+
+
+"gviz_api" examples
+http://google-visualization.appspot.com/python/
+
+
+wget http://google-visualization-python.googlecode.com/files/gviz_api_py-1.8.2.tar.gz
+pip install ./orig/gviz_api_py-1.8.2.tar.gz 
+

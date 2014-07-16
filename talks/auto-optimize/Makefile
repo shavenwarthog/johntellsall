@@ -2,6 +2,10 @@ SHELL := /bin/bash
 
 all: last
 
+.PHONY: static.html
+static.html: static_example.py
+	python $< > $@
+
 best: optimize.dat
 	sort -r -k 2n $< | head
 

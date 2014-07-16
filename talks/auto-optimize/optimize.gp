@@ -24,6 +24,7 @@ set xtics nomirror rotate by -45
 
 # Show human-readable Y-axis. E.g. "100 k" instead of 100000.
 # set format y '%.0s %c'
+set format y '%.1f'
 
 # Replace small stripes on the Y-axis with a horizontal gridlines
 set tic scale 0
