@@ -1,3 +1,4 @@
 # 1. stream of lines
 import fileinput
-print ''.join( fileinput.input() )
+lines = fileinput.input() 
+print ''.join( lines )

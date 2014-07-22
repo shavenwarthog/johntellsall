@@ -248,8 +248,8 @@ Practical Advantages to FP
 .. _`Composability!`: http://en.wikipedia.org/wiki/Composability
 
 
-Functional Programming example
-------------------------------
+Functional Programming examples
+-------------------------------
 
 Example: Windows INI-file parser; aka ConfigParser
 
@@ -262,6 +262,9 @@ Example: Windows INI-file parser; aka ConfigParser
 4. dictionary
 
 5. TBD: dict of dictionaries
+
+
+.. include: fp-examples.rst
 
 
 Django QuerySets
