@@ -3,8 +3,8 @@ all: jslides
 # push:
 # 	rsync -av ../class/django-queryset2 class/ && make sync
 
-count:
-	./mkindex.py index.rst
+count: fp-examples.rst
+	cat index.rst fp-examples.rst | ./mkindex.py -
 
 %.rst: %.py
 	./mkexamples.py $<

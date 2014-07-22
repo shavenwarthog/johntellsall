@@ -15,7 +15,7 @@ Chris
 
 
 IDEAS
------
+=====
 
 iterators/generators = "stream"
 
@@ -35,12 +35,12 @@ QuerySet is a stream
 Iterators
 =========
 
-iterator ~ stream
+Iterator Review
 -----------------
 
 
-An iterator is a *stream* of data -- sort of a restricted, very
-efficient list
+An iterator is a *stream* of data |---| sort of a restricted, very
+efficient list.
 
 >>> list([1,2])
 [1, 2]
@@ -48,7 +48,13 @@ efficient list
 >>> iter([1,2])
 <listiterator object at 0x7f429d83c750>
 
+
+.. |--| unicode:: U+2013   .. en dash
+.. |---| unicode:: U+2014  .. em dash, trimming surrounding whitespace
+   :trim:
+
 .. note::
+   mdash: http://docutils.sourceforge.net/FAQ.html
 
    iterators have a item and next and that's it
    - Preferred, because they take almost no space
@@ -105,7 +111,7 @@ iterate across a *stream* of strings
    StopIteration
 
 
-List very similar to Iterator
+Very similar
 ----------------------------------------------------------------
 
 .. code-block:: python
@@ -150,12 +156,37 @@ TypeError: object of type 'file' has no len()
 Common Iterator Functions
 ----------------------------------------------------------------
 
-.. hlist::
 * .. py:function:: enumerate(iter)
 * .. py:function:: sorted(iter)
 * .. py:function:: range(stop)
+
+very important:
+
 * .. py:function:: filter(func/None, iter)
 * .. py:function:: map(func, *iterables)
+
+
+`itertools <https://docs.python.org/2/library/itertools.html>`_
+---------
+
+.. hlist::
+   *  **chain()**
+   *  count()
+   *  cycle()
+   *  repeat()
+   *  **chain()**
+   *  compress()
+   *  dropwhile()
+   *  groupby()
+   *  **ifilter()**
+   *  ifilterfalse()
+   *  **islice()**
+   *  imap()
+   *  starmap()
+   *  tee()
+   *  takewhile()
+   *  **izip()**
+   *  izip_longest()
 
 
 islice -- similar to list
@@ -259,8 +290,7 @@ Example: Windows INI-file parser; aka ConfigParser
 Django QuerySets
 ================================================================
 
-A queryset in Django represents a stream of rows from the database,
-filtered by a query.
+represents a *stream* of rows from the database
 
 
 .. note:: models.py
