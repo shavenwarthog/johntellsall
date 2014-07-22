@@ -52,9 +52,12 @@ Warning: troubleshooting an auto-optimizing system with variable
 workload can be difficult.  Some suggestions:
 
 - provide an Off switch
+
 - set values to be safe and correct, over fast
+
 - set parameter min/max values, and log if the parameters are
 optimized to these levels
+
 - optimize slowly, so that values gradually converge to the best
 value. If parameters flap back and forth it'll be very difficult to
 verify the system is behaving correctly.

@@ -2,6 +2,10 @@ SHELL := /bin/bash
 
 all: last
 
+.PHONY: x.dat
+x.dat:
+	python ./optimize.py
+
 .PHONY: static.html
 static.html: static_example.py
 	python $< > $@

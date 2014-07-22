@@ -165,25 +165,38 @@ def parse_opts():
     parser.add_argument(
         '--cmd_type', type=str, default='pyflakes',
         help='') # TODO
+    # TODO: eval every num procs at least once
     parser.add_argument(
         '--max_evals', type=int, default=15,
         help='') # TODO
+    parser.add_argument(
+        '-o', '--output', type=argparse.FileType('w'),
+        help='') # TODO
+    # TODO: document num_procs as a list: -P1,2,4
+    parser.add_argument(
+        '-P', type=str, dest='num_procs',
+        help='Execute num in parallel; like `xargs`')
     parser.add_argument('--verbose', '-v', action='count')
     return parser.parse_args()
 
 
 def main():
     opts = parse_opts()
-    print opts.__dict__
 
     if opts.verbose:
         logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
-    # TODO: make more flexible
-    outf = open('optimize.dat', 'w')
-
     sample = get_sample(batch_size=opts.batch_size)
-    num_procs = get_numprocs_fibonacci(sample['batch_size'])
+
+    outf = opts.output
+    if outf is None:
+        outf = open(os.devnull, 'w')
+
+    num_procs = [ int(num) 
+                  for num in (opts.num_procs or '').split(',')
+    ]
+    if not num_procs:
+        num_procs = get_numprocs_fibonacci(sample['batch_size'])
 
     print '{} source files, sampled {} at a time'.format(
         len(sample['data']), sample['batch_size'],
