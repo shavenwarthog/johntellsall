@@ -7,6 +7,7 @@ last.out:
 fp-examples.rst:
 	echo < /dev/null > $@
 	make --no-print-directory parse1.rst >> $@
+	@echo
 	@cat $@
 
 %.rst: %.py
