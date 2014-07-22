@@ -1,3 +1,3 @@
-# stream of lines
+# 1. stream of lines
 import fileinput
 print ''.join( fileinput.input() )
