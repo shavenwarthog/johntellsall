@@ -15,19 +15,21 @@ Chris
 
 
 IDEAS
-=====
+-----
 
 iterators/generators = "stream"
 
-	- itertools
-
 FP: easy programming with composition
 
+QuerySet is a stream
+
+.. note::
+
+	- itertools
 	- functions
 
 	- no side effects
 
-QuerySet results as a stream
 
 
 Iterators
@@ -57,15 +59,18 @@ File iterator
 
 iterate across a *stream* of strings
 
->>> f = open('ing.txt')
+>>> f = open('recipe.ini')
 >>> for line in f:
     print line
 
->>> # Old Fashioned
-1.5 oz whiskey
-1 tsp water
-0.5 tsp sugar
-2 dash bitters
+::
+
+     # very tasty
+     [Old Fashioned]
+     1:1.5 oz whiskey
+     2:1 tsp water
+     3:0.5 tsp sugar
+     4:2 dash bitters
    
 .. note::
 
@@ -74,35 +79,34 @@ iterate across a *stream* of strings
    Ex: Database iterator
 
 
-What can you do with a iterator?
-----------------------------------------------------------------
+..
+   What can you do with a iterator?
+   ----------------------------------------------------------------
 
->>> f = open('ing.txt')
->>> f.next()
-'# Old Fashioned\n'
->>> f.next()
-'1.5 oz whiskey\n'
+   >>> f = open('ing.txt')
+   >>> f.next()
+   '# Old Fashioned\n'
+   >>> f.next()
+   '1.5 oz whiskey\n'
 
 
-What happens at the end?
-----------------------------------------------------------------
+   What happens at the end?
+   ----------------------------------------------------------------
 
->>> f = open('/dev/null')
->>> f.next()
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-StopIteration
+   >>> f = open('/dev/null')
+   >>> f.next()
+   Traceback (most recent call last):
+     File "<stdin>", line 1, in <module>
+   StopIteration
 
->>> iter([]).next()
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-StopIteration
+   >>> iter([]).next()
+   Traceback (most recent call last):
+     File "<stdin>", line 1, in <module>
+   StopIteration
 
 
 List very similar to Iterator
 ----------------------------------------------------------------
-
-Iterator is a *stream* of objects
 
 .. code-block:: python
 
@@ -154,26 +158,26 @@ Common Iterator Functions
 * .. py:function:: map(func, *iterables)
 
 
-List/Iterator Equivalents
+islice -- similar to list
 -------------------------
 
-.. py:function:: islice(iter, num)
+**islice(iter, num)** -- return first few items
 
->>> list([1,2,3])[:1]
-[2]
+>>> list([1,2,3])[:2]
+[1,2]
 
 >>> from itertools import *
->>> iter([1,2,3])[:1]
+>>> iter([1,2,3])[:2]
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 TypeError: 'listiterator' object has no attribute '__getitem__'
 >>> islice(iter([1,2,3]), 2)
 <itertools.islice object at 0x7f429d7de9f0>
->>> list(islice(iter([1,2,3]), 2))
+>>> list(_)
 [1, 2]
 
 
-iter: chain
+chain -- only for iterators
 ----------------------------------------------------------------
 
 **chain(iter*)** gives elements of each stream in order
@@ -185,7 +189,7 @@ Equivalent to **+** for lists.
 >>> from itertools import *
 >>> chain(iter([1,2]), iter([3]))
 <itertools.chain object at 0x7f429d848510>
->>> list( chain(iter([1,2]), iter([3])) )
+>>> list(_)
 [1, 2, 3]
 
 
@@ -195,40 +199,25 @@ Equivalent to **+** for lists.
    lazy vs eager
    ****************************************************************
 
-iter: islice
-----------------------------------------------------------------
-
-**islice(iter, num)** -- get counted elements of stream
-Equivalent to slice operator for lists.
-
->>> list([1,2,3])[:1]
-[2]
-
->>> from itertools import *
->>> iter([1,2,3])[:1]
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-TypeError: 'listiterator' object has no attribute '__getitem__'
->>> islice(iter([1,2,3]), 2)
-<itertools.islice object at 0x7f429d7de9f0>
->>> list(islice(iter([1,2,3]), 2))
-[1, 2]
-
-
 
 Functional Programming
 ==============================
 
 
-FP vs others
-------------
+programming styles
+------------------
 
-procedural: list of instructions
+*procedural*
 
-object oriented: object has state and specific functions to
-query/modify state.  Easy to specialize by subclassing
+	list of instructions
 
-**functional: functions operate on immutable objects**
+*object oriented*
+
+	object has state and functions to query/modify state; specialize by subclassing
+
+**functional**
+
+	functions operate on immutable objects
 
 .. note::
 
@@ -264,14 +253,14 @@ Example: Windows INI-file parser; aka ConfigParser
 5. TBD: dict of dictionaries
 
 
-.. include: fp-examples.rst
+.. include:: fp-examples.rst
 
 
 Django QuerySets
 ================================================================
 
-A queryset in Django represents a number of rows in the database,
-optionally filtered by a query.
+A queryset in Django represents a stream of rows from the database,
+filtered by a query.
 
 
 .. note:: models.py

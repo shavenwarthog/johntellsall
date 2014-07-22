@@ -1,26 +1,20 @@
 all: jslides
 
+# push:
+# 	rsync -av ../class/django-queryset2 class/ && make sync
+
+count:
+	./mkindex.py index.rst
+
+%.rst: %.py
+	./mkexamples.py $<
+
 last.out:
 	make `ls -1t *.py | head -1 | sed -e s/.py/.out/`
 
 .PHONY: fp-examples.rst
 fp-examples.rst:
-	echo < /dev/null > $@
-	make --no-print-directory parse1.rst >> $@
-	@echo
-	@cat $@
-
-%.rst: %.py
-	@echo $<
-	@echo ----------------
-	@echo
-	@echo '.. code-block: python'
-	@echo
-	@awk '{print "    "$$0}' $<
-	@echo
-	@echo ::
-	@echo
-	@python $< recipe.ini | awk '{print "    "$$0}'
+	./mkexamples.py parse?.py > $@
 
 oindex:
 	./mkindex.py ../django-queryset/index.rst

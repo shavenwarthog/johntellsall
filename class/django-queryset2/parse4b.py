@@ -8,8 +8,10 @@ def parse_keyvalue(line):
     if m:
         return m.groups()
     return None
-lines = ifilterfalse(has_comment, fileinput.input())
-matches = (parse_keyvalue(line) for line in lines)
-keyvalues = ifilter(None, matches)
-confdict = dict(keyvalues)
+confdict = dict(
+    kv for kv in (
+        parse_keyvalue(line)
+        for line in fileinput.input()
+    ) if kv
+    )
 print confdict
