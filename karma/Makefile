@@ -23,4 +23,4 @@ tags:
 	@echo
 	@echo '## output'
 	@echo
-	@python $< | sed -e 's/^/    /'
+	@python $< 2>&1 | sed -e 's/^/    /'

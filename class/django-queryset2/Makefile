@@ -1,7 +1,14 @@
+WEB := $(HOME)/src/johntellsall/website/class/django-queryset2
+
 all: jslides
 
-# push:
-# 	rsync -av ../class/django-queryset2 class/ && make sync
+# copy all but backup files and output files, like '_build'
+push:
+	-ln -s $(PWD)/_build/slides .
+	rsync -sa --copy-links \
+	`/bin/ls -1 | egrep -v '[_~]'` $(WEB)/
+	@echo
+	find $(WEB) -type f
 
 count: fp-examples.rst
 	cat index.rst fp-examples.rst | ./mkindex.py -
