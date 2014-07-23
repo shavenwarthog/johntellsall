@@ -3,23 +3,32 @@
    hieroglyph-quickstart on Sat Jul 19 13:59:19 2014.
 
 
-Django QuerySets and Functional Programming #2
-==============================================
-
-Contents:
-
+Django QuerySets and Functional Programming
+===========================================
 
 for Professional Python group at TrueCar
-Chris
 
+July 22, 2014
+
+
+ME
+====
+
+   - Senior dev/server guy; DevOps
+   - 15 years experience with Python
+   - john@johntellsall.com
+
+.. note::
+
+   - first PyCon I went to had 40 people!
 
 
 IDEAS
 =====
 
-iterators/generators = "stream"
+iterator/generator = "stream"
 
-FP: easy programming with composition
+FP: programming with composition
 
 QuerySet is a stream
 
@@ -31,11 +40,17 @@ QuerySet is a stream
 	- no side effects
 
 
+overview
+--------
+
+.. image:: _static/large_BaxterCutawayFF3.jpg
+
 
 Iterators
 =========
 
-Iterator Review
+
+Iterator review
 -----------------
 
 
@@ -230,9 +245,26 @@ Equivalent to **+** for lists.
    lazy vs eager
    ****************************************************************
 
+☃
+=
+
 
 Functional Programming
 ==============================
+
+
+what?
+-----
+
+.. image:: _static/jimmy-2.jpg
+
+
+
+food chain
+----------
+
+.. image:: _static/FoodChain.jpg
+
 
 
 programming styles
@@ -248,7 +280,7 @@ programming styles
 
 **functional**
 
-	functions operate on immutable objects
+	functions operate on streams of immutable objects
 
 .. note::
 
@@ -285,6 +317,10 @@ Example: Windows INI-file parser; aka ConfigParser
 
 
 .. include:: fp-examples.rst
+
+
+☃
+=
 
 
 Django QuerySets
@@ -335,17 +371,15 @@ QuerySets can be shifty
 Functional QuerySets
 ================================================================
 
-.. rst-class:: build
+How can you tell if a list is empty or not?
 
-   How can you tell if a list is empty or not?
+    * an iterator?
 
-   . an iterator?
-
-   . a QuerySet?
+    * a QuerySet?
 
 
-Empty List
-==========
+Empty List?
+===========
 
 .. note::
 
@@ -363,8 +397,8 @@ True
    Lists are *eager* -- always know everything
 
 
-Empty Iterator
-==============
+Empty Iterator?
+===============
 
 .. note::
    *How can you tell if an iterator is empty or not?*
@@ -441,7 +475,7 @@ Because QuerySet *is* an iterator
    qs.values(); qs.values_list(); qs.values-list(flat=True)
 
 
-Can mix and match
+Can mix/match QS/iterators...
 ----------------------------------------------------------------
 
 >>> Meeting.objects.all()[0].id
@@ -457,7 +491,7 @@ Can mix and match
 [<Meeting: Meeting object>]
 
 
-But not always
+...but not always
 --------------
 
 
@@ -479,6 +513,21 @@ Use x.exists(), not bool(x) -- `more efficient <https://docs.djangoproject.com/e
    little work, then process a batch, without waiting for the entire
    list of results.
 
+
+IDEAS
+=====
+
+iterator/generator = "stream"
+
+FP: functions operate on streams of immutable objects
+
+QuerySet is a stream
+
+.. note::
+   programming with composition
+
+
+.. rst-class:: questions
 
 Questions?
 ================
@@ -510,21 +559,3 @@ Using Django querysets effectively by Dave Hall
 (best blog title ever)
 
 http://blog.etianen.com/blog/2013/06/08/django-querysets/
-
-
-HISTORICAL
-==========
-
-List/Iterator Equivalents
--------------------------
-
-* .. py:function:: ifilter(f, iter) 
-
-.. note::
-
-* .. py:function:: chain(*iterables)
-    .. py:function:: range(start, stop[, step]) -> counter
-
-
-
-

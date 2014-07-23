@@ -31,3 +31,8 @@ tags:
 	ctags-exuberant -e -R --languages=python \
 	. $(VIRTUAL_ENV)/lib/python*/*/django
 	wc -l TAGS
+
+images:
+	/bin/ls -1 _static/*g \
+	| awk '{print ".. image::",$$1}'
+# .. image:: _static/large_BaxterCutawayFF3.jpg
