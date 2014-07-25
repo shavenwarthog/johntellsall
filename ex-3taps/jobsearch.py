@@ -27,7 +27,9 @@ def search(**kwargs):
 block = search(
     heading='accordion',
     location_metro='USA-LAX',
-    source='CRAIG',
+    # source='CRAIG',
+    price='..500',
+    retvals='heading,price,category,category_group,status',
     )
 for post in block['postings']:
     pprint(post)
