@@ -3,6 +3,9 @@ from pprint import pprint
 
 # http://docs.3taps.com/search_api.html
 
+# http://reference.3taps.com/category_groups?auth_token=
+# CAT_GROUP = 
+# http://reference.3taps.com/categories?a
 def format_url(argdict):
     return 'http://search.3taps.com/?auth_token={}&{}'.format(
         os.environ['API_3TAPS_KEY'],
@@ -25,11 +28,13 @@ def search(**kwargs):
 
 
 block = search(
-    heading='accordion',
+    # XXXXX: doesnt work: category_group='JJJJ',
+    category='JWEB|JCON|JENG',
+    heading='python',
     location_metro='USA-LAX',
     # source='CRAIG',
-    price='..500',
-    retvals='heading,price,category,category_group,status',
+    # price='..500',
+    # retvals='heading,category,category_group,status',
     )
 for post in block['postings']:
     pprint(post)
