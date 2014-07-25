@@ -1,4 +1,4 @@
-import json, os, urllib
+import json, os, sys, urllib
 from pprint import pprint
 
 # http://docs.3taps.com/search_api.html
@@ -26,6 +26,14 @@ def do_search(query):
 class TTapsResult(object):
     def __init__(self, **kwargs):
         self.query = kwargs
+        self.url = None
+        self.block = None
+        self.search()
+
+
+    def search(self, *args, **kwargs):
+        assert not args, 'kwargs only'
+        self.query.update( kwargs )
         self.url, self.block = do_search(self.query)
 
 
@@ -44,6 +52,19 @@ class TTapsResult(object):
 # price='..500',
 # source='CRAIG'
 
+
+result = TTapsResult(
+    category='JWEB|JCON|JENG',
+    heading='python',
+    # count='category_group', # X: count mode
+    location_metro='USA-LAX',
+    retvals='external_url,heading,category,category_group,status,price',
+)
+pprint(result.block)
+
+result.search(tier=result['next_tier'])
+pprint(result.block)
+sys.exit(0)
 
 for term in ['python','java','django','php']:
     result = TTapsResult(
