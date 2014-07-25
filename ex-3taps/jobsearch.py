@@ -3,9 +3,9 @@ from pprint import pprint
 
 # http://docs.3taps.com/search_api.html
 
-# http://reference.3taps.com/category_groups?auth_token=
-# CAT_GROUP = 
-# http://reference.3taps.com/categories?a
+# http://reference.3taps.com/category_groups
+# http://reference.3taps.com/categories
+
 def format_url(argdict):
     return 'http://search.3taps.com/?auth_token={}&{}'.format(
         os.environ['API_3TAPS_KEY'],
@@ -21,22 +21,30 @@ def search(**kwargs):
         kwargs[dotkey] = kwargs.pop(ukey)
 
     url = format_url(kwargs)
-    print url
     data = urllib.urlopen(url).read()
     return json.loads(data)
     
 
-
-block = search(
-    # XXXXX: doesnt work: category_group='JJJJ',
-    category='JWEB|JCON|JENG',
-    heading='python',
-    location_metro='USA-LAX',
-    # source='CRAIG',
-    # price='..500',
-    # retvals='heading,category,category_group,status',
+for term in ['python','java','django','php']:
+    block = search(
+        # XXXXX: doesnt work: category_group='JJJJ',
+        category='JWEB|JCON|JENG',
+        count='category_group', # X: count mode
+        heading=term,
+        location_metro='USA-LAX',
+        # source='CRAIG',
+        # price='..500',
+        retvals='external_url,heading,category,category_group,status,price',
     )
-for post in block['postings']:
-    pprint(post)
+    if 'postings' in block:
+        print '{:10} {}'.format(term, len(block['postings']))
+        for post in block['postings']:
+            if 1:
+                pprint(post)
+            else:
+                print post['heading']
+    else:
+        print term,':'
+        pprint(block)
 
 
