@@ -24,7 +24,7 @@ INSTALL:
 
 # TODO: clean up
 import sys
-sys.path.insert(0, '/usr/lib/python2.7/dist-packages/') # scipy
+sys.path.insert(0, '/usr/lib/python2.7/dist-packages/') # HACK: scipy
 
 import argparse, functools, itertools, json, logging
 import os, random, subprocess, time
@@ -174,7 +174,7 @@ def parse_opts():
         help='') # TODO
     # TODO: document num_procs as a list: -P1,2,4
     parser.add_argument(
-        '-P', type=str, dest='num_procs',
+        '-P', type=str, dest='num_procs', default=None,
         help='Execute num in parallel; like `xargs`')
     parser.add_argument('--verbose', '-v', action='count')
     return parser.parse_args()
@@ -192,10 +192,12 @@ def main():
     if outf is None:
         outf = open(os.devnull, 'w')
 
-    num_procs = [ int(num) 
-                  for num in (opts.num_procs or '').split(',')
-    ]
-    if not num_procs:
+    num_procs = None
+    if opts.num_procs:
+        num_procs = [ int(num) 
+                      for num in (opts.num_procs or '').split(',')
+                  ]
+    else:
         num_procs = get_numprocs_fibonacci(sample['batch_size'])
 
     print '{} source files, sampled {} at a time'.format(

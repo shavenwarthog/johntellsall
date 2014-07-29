@@ -2,9 +2,13 @@ SHELL := /bin/bash
 
 all: last
 
-.PHONY: x.dat
-x.dat:
-	python ./optimize.py
+# XXXXX HACK: scipy
+%.run: %.py
+	env PYTHONPATH=/usr/lib/python2.7/dist-packages/ \
+	python $<
+
+zoot:
+	./optimize.py -o 
 
 .PHONY: static.html
 static.html: static_example.py
