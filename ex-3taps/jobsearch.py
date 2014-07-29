@@ -24,27 +24,22 @@ def do_search(query):
 
 
 class TTapsResult(object):
-    def __init__(self, **kwargs):
-        self.query = kwargs
-        self.url = None
-        self.block = None
-        self.search()
-
-
-    def search(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         assert not args, 'kwargs only'
-        self.query.update( kwargs )
+        self.query = kwargs
         self.url, self.block = do_search(self.query)
 
 
-    def __iter__(self):
-        return iter(self.block)
+    # def __iter__(self):
+    #     return iter(self.block)
 
+
+    def __getattr__(self, funcname):
+        print '-',funcname
+        return getattr(self.block, funcname)
 
     def __getitem__(self, key):
         return self.block[key]
-
-
     
 # XXXXX: doesnt work: category_group='JJJJ',
 # count='category_group', # X: count mode
@@ -53,39 +48,50 @@ class TTapsResult(object):
 # source='CRAIG'
 
 
-result = TTapsResult(
-    category='JWEB|JCON|JENG',
-    heading='python',
-    # count='category_group', # X: count mode
-    location_metro='USA-LAX',
-    retvals='external_url,heading,category,category_group,status,price',
-)
-pprint(result.block)
+for term in ['python','java','django','php']:
+    anchor = None
+    for tier in range(2):
+        query = dict(
+            anchor=anchor,
+            category='JWEB|JCON|JENG',
+            heading='python',
+            # count='category_group', # X: count mode
+            location_metro='USA-LAX',
+            retvals='external_url,heading,category,category_group,status,price,source',
+            rpp=100,            # num results per page
+            tier=tier,
+        )
+        if not anchor:
+            del query['anchor']
+        result = TTapsResult(**query)
+        anchor = result.get('anchor', 0)
+        pprint(result.block)
+        # if result['next_tier'] < 0:
+        #     break
 
-result.search(tier=result['next_tier'])
-pprint(result.block)
+# result.search(tier=result['next_tier'])
+# pprint(result.block)
 sys.exit(0)
 
-for term in ['python','java','django','php']:
-    result = TTapsResult(
-        category='JWEB|JCON|JENG',
-        heading=term,
-        count='category_group', # X: count mode
-        location_metro='USA-LAX',
-        retvals='external_url,heading,category,category_group,status,price',
-    )
-    if 'postings' in result:
-        print '{:10} {}'.format(term, len(result['postings']))
-        pprint(result.block); continue
-        for post in result['postings']:
-            if 1:
-                pprint(post)
-            else:
-                print post['heading']
-    else:
-        print '{:12} {:3d}'.format(
-            term,
-            result.block['num_matches'],
-            )
+# result = TTapsResult(
+#         category='JWEB|JCON|JENG',
+#         heading=term,
+#         count='category_group', # X: count mode
+#         location_metro='USA-LAX',
+#         retvals='external_url,heading,category,category_group,status,price',
+#     )
+#     if 'postings' in result:
+#         print '{:10} {}'.format(term, len(result['postings']))
+#         pprint(result.block); continue
+#         for post in result['postings']:
+#             if 1:
+#                 pprint(post)
+#             else:
+#                 print post['heading']
+#     else:
+#         print '{:12} {:3d}'.format(
+#             term,
+#             result.block['num_matches'],
+#             )
 
 

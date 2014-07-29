@@ -5,7 +5,7 @@ all: jslides
 # copy all but backup files and output files, like '_build'
 push:
 	-ln -s $(PWD)/_build/slides .
-	rsync -sa --copy-links \
+	rsync -sva --copy-links \
 	`/bin/ls -1 | egrep -v '[_~]'` $(WEB)/
 	@echo
 	find $(WEB) -type f
