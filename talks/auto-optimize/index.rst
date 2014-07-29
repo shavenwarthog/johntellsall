@@ -6,10 +6,14 @@
 Automatic Parameter Optimization
 ================================
 
-Contents:
+THEME
+=====
 
-.. toctree::
-   :maxdepth: 2
+Processes have settings and knobs with non-obvious settings. Sample
+the possibilities to automatically optimize based on static or dynamic
+conditions.
+
+
 
 
 

@@ -1,8 +1,31 @@
 SHELL := /bin/bash
 
+# XXXXX HACK: scipy
+SETUP_ENV := env PYTHONPATH=/usr/lib/python2.7/dist-packages/
+
+
 all: last
 
-#         -D slide_theme=single-level
+.PHONY: all.out
+all.rst: $(addsuffix .out,$(basename $(wildcard *.py)))
+	echo $<
+
+.PHONY: %.rst
+%.rst: %.py
+	make $(addsuffix .out,$(basename $<))
+	../../mkexamples.py $< $(addsuffix .out,$(basename $<)) | tee $@
+
+%.out: %.py
+	$(SETUP_ENV) python $< > $@
+
+# %.rst: %.py
+# 		../../mkexamples.py $<
+
+.PHONY: simple.rst simple.out
+simple.rst: simple.py simple.out
+	../../mkexamples.py simple.py simple.out | tee $@
+
+.PHONY: jslides
 jslides: index.rst
 		sphinx-build -qN -b slides -d _build/doctrees \
 		. _build/slides
@@ -17,11 +40,6 @@ tags:
 
 # :::::::::::::::::::::::::::::::::::::::::::::::::: HISTORICAL
 
-
-# XXXXX HACK: scipy
-%.run: %.py
-	env PYTHONPATH=/usr/lib/python2.7/dist-packages/ \
-	python $<
 
 zoot:
 	./optimize.py -o 
