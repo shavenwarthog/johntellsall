@@ -2,28 +2,33 @@ SHELL := /bin/bash
 
 # XXXXX HACK: scipy
 SETUP_ENV := env PYTHONPATH=/usr/lib/python2.7/dist-packages/
-
+ALL_NAMES := $(basename $(wildcard simple*.py))
+ALL_NAMES += optimize
 
 all: last
 
-.PHONY: all.out
-all.rst: $(addsuffix .out,$(basename $(wildcard *.py)))
-	echo $<
 
-.PHONY: %.rst
-%.rst: %.py
-	make $(addsuffix .out,$(basename $<))
-	../../mkexamples.py $< $(addsuffix .out,$(basename $<)) | tee $@
+all.out: $(addsuffix .out,$(ALL_NAMES))
+	@echo done
 
 %.out: %.py
 	$(SETUP_ENV) python $< > $@
 
-# %.rst: %.py
-# 		../../mkexamples.py $<
 
-.PHONY: simple.rst simple.out
-simple.rst: simple.py simple.out
-	../../mkexamples.py simple.py simple.out | tee $@
+# ::::::::::::::::::::::::: BUILD
+
+# images -- list images in Markdown format
+# Ex: .. image:: _static/large_BaxterCutawayFF3.jpg
+.PHONY: images
+images:
+        /bin/ls -1 _static/*g \
+        | awk '{print ".. image::",$$1}'
+
+
+.PHONY: single
+single:
+	sphinx-build -b singlehtml -d _build/doctrees \
+	. _build/singlehtml
 
 .PHONY: jslides
 jslides: index.rst
@@ -32,33 +37,18 @@ jslides: index.rst
 		@echo
 		wc -l *.rst
 
+# ::::::::::::::::::::::::: DEV
+
+# INSTALL: pip install watchdog
+automake:
+	watchmedo shell-command \
+	--pattern='*.rst' --command 'make jslides single'
+
+old_automake:
+	inotifyrun make jslides single
+
 tags:
 	ctags-exuberant -e -R \
-	. \
-	$(VIRTUAL_ENV)/lib/*/site-packages/
+# 	. \
+# 	$(VIRTUAL_ENV)/lib/*/site-packages/
 	wc -l TAGS
-
-# :::::::::::::::::::::::::::::::::::::::::::::::::: HISTORICAL
-
-
-zoot:
-	./optimize.py -o 
-
-.PHONY: static.html
-static.html: static_example.py
-	python $< > $@
-
-best: optimize.dat
-	sort -r -k 2n $< | head
-
-last:
-	python `ls -1t *.py | head -1`
-
-optimize.dat: optimize.py
-	./$<
-
-.PHONY: optimize.png
-optimize.png: optimize.gp optimize.dat
-	gnuplot optimize.gp
-	eog $@
-

@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-all: last
+all: last.out
 
 last:
 	python `ls -1t *.py | head -1`

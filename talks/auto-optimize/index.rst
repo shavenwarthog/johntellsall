@@ -186,9 +186,14 @@ min(x^2)
    <iframe width="800" height="600" frameborder="0" seamless="seamless" scrolling="no" src="https://plot.ly/~johnlmitchell/1/800/600"></iframe>
 
 .. note::
- _static/minx5e2_in_-102c_2b10.svg
+
+   _static/minx5e2_in_-102c_2b10.svg
+
+.. image:: _static/minx5e2_in_-102c_2b10.png
+
 
 .. include:: simple.rst
+
 .. include:: simple2.rst
 
 
@@ -199,17 +204,32 @@ example: check Python files for errors in parallel
 future directions
 -----------------
 
+Facebook
+========
 
+model power vs requests/sec
+---------------------------
+
+.. image:: _static/fb-cpu-plot.png
+
+.. note::
+
+   60 watts of power when it’s idle (0 RPS, or requests-per-second). The power consumption jumps to 130 watts when it runs at low-level CPU utilization (small RPS). But when it runs at medium-level CPU utilization, power consumption increases only slightly to 150 watts. Therefore, from a power-efficiency perspective, we should try to avoid running a server at low RPS and instead try to run at medium RPS.
+
+
+power saved
+-----------
+
+.. image::  _static/fb-powersave-plot.png
 
 References
 ==========
 
-Distributed Asynchronous Hyperparameter Optimization in Python 
-http://hyperopt.github.io/hyperopt
+`Distributed Asynchronous Hyperparameter Optimization in Python <http://hyperopt.github.io/hyperopt>`_
 
-SciPy2013 talk
-https://github.com/jaberg/hyperopt/wiki/Scipy2013
+`SciPy2013 talk <https://github.com/jaberg/hyperopt/wiki/Scipy2013>`_
 
+`Making Facebook’s software infrastructure more energy efficient with Autoscale <https://code.facebook.com/posts/816473015039157/making-facebook-s-software-infrastructure-more-energy-efficient-with-autoscale/>`_
 
 
 ☃
