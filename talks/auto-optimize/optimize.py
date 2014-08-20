@@ -124,7 +124,7 @@ def format_command(cmd_type, paths, concurrency):
             concurrency,
         )
     elif cmd_type == 'pylint':
-        return 'echo {} | xargs -n1 -P{} pyflakes 2> /dev/null'.format(
+        return 'echo {} | xargs -n1 -P{} pylint 2> /dev/null'.format(
             ' '.join(paths),
             concurrency,
         )

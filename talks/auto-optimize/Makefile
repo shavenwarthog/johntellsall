@@ -14,6 +14,20 @@ all.out: $(addsuffix .out,$(ALL_NAMES))
 %.out: %.py
 	$(SETUP_ENV) python $< > $@
 
+%.html: %.py
+	pygmentize -f html $< > $@
+
+# :::::::::::::::::::::::::::::::::::::::: PUSH
+
+WEB := $(HOME)/src/johntellsall/website/class/auto-optimize
+
+# copy all but backup files and output files, like '_build'
+push:
+	-ln -s $(PWD)/_build/slides .
+	rsync -sva --copy-links \
+	`/bin/ls -1 | egrep -v '[_~]'` $(WEB)/
+	@echo
+	find $(WEB) -type f
 
 # ::::::::::::::::::::::::: BUILD
 
