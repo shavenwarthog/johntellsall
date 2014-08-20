@@ -8,4 +8,5 @@ import soaptest
 urlpatterns = patterns(
     '',
     url(r'^soaptest/', include('soaptest.urls')),
+    url(r'^rpctest/', include('rpctest.urls')),
 )
