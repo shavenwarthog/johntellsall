@@ -249,6 +249,7 @@ minimize objective function
             loss=elapsed/concurrency,
             )
 
+from `optimize.py <http://johntellsall.com/class/auto-optimize/optimize.html>`_
 
 run in parallel?
 ================
@@ -291,6 +292,9 @@ Pyflakes dataset
       20	 1.2	0.06
     ANSWER: for files 20 at a time, do 20 jobs in parallel
     
+
+wait, what?
+===========
 
 Pyflakes plot
 -------------

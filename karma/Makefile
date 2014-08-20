@@ -16,6 +16,11 @@ tags:
 	$(VIRTUAL_ENV)/lib/python2.7/site-packages/requests*
 	wc -l TAGS
 
+%.src: %.py
+	@echo '## source'
+	@echo
+	@cat $< | sed -e 's/^/    /'
+
 %.out: %.py
 	@echo '## source'
 	@echo
