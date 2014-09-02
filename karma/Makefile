@@ -2,6 +2,10 @@ SHELL := /bin/bash
 
 all: last.out
 
+mshared.test:
+	(sleep 1 ; echo beer | nc -vvu localhost 9876 ) &
+	python ./mshared.py
+
 last:
 	python `ls -1t *.py | head -1`
 
@@ -10,10 +14,10 @@ last.out:
 
 tags:
 	ctags-exuberant -e -R \
-	. \
-	/usr/lib/python2.7/{collections,multiprocessing,BaseHTTPServer,resource,subprocess,threading,unittest}* \
-	/usr/share/pyshared/scapy/ \
-	$(VIRTUAL_ENV)/lib/python2.7/site-packages/requests*
+	/usr/lib/python2.7/multiprocessing/*
+#	/usr/lib/python2.7/{collections,multiprocessing,BaseHTTPServer,resource,SocketServer,subprocess,threading,unittest}* \
+# 	/usr/share/pyshared/scapy/ \
+# 	$(VIRTUAL_ENV)/lib/python2.7/site-packages/{matplotlib,network,requests}*
 	wc -l TAGS
 
 %.src: %.py
