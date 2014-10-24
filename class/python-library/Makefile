@@ -61,8 +61,9 @@ automake:
 # old_automake:
 # 	inotifyrun make jslides single
 
-# tags:
-# 	ctags-exuberant -e -R \
-# # 	. \
-# # 	$(VIRTUAL_ENV)/lib/*/site-packages/
-# 	wc -l TAGS
+tags:
+	ctags-exuberant -e -R \
+	. \
+	/usr/lib/python2.7/{CGI,Simple}*y \
+	$(VIRTUAL_ENV)/lib/*/site-packages/
+	wc -l TAGS
