@@ -115,7 +115,7 @@ namespaces
 - socket: IP? multiple IPs? IPv6? TIPC address?
 - filesystem
 - in-kernel socket space!
-- cool ipfilter tricks, out of scope
+( - cool ipfilter tricks, out of scope )
 
 * kernel provides (file like) abstractions over *lots* of different
 services, in different namespaces.  *
@@ -157,5 +157,115 @@ Won't cover: (kernel) queues, RT signals, ipfilter subsystem; also TIPC, inotify
 - also
 	https://github.com/slideinc/sendmsg -- for Python
 
+
+Apache doesn't use sendfd() trick!  I haven't braved the code base yet
+-- it likely uses something even more awesome than the parent process
+copying bytes back and forth. Uwsgi and Nginx use sendmsg(), but
+Apache, Gunicorn, Redis, Unicorn, and Varnish don't.
+
+*theme: everything you know is wrong
+- socket is stream, once bytes are read they're gone
+
+LPI book: ioctl(fd, FIONREAD, &count) to get number of unread bytes in stream, or # bytes next read on datagram socket -- Linux only.
+
+stream: reliable, connection-oriented
+datagram: message boundaries preserved
+
+- "reliable" means unaltered data goes through _or_ you get an error
+
+- datagram: esrver doesn't have to be up
+
+- stream: doesn't provide priority, can't "interrupt" big upload/download
+
+- SSE: stream down to browser, dgram (POST) up
+- WebSocket: two streams
+
+- "proto" arg always zero, except for IPPROTO_RAW (SOCK_RAW -- TODO)
+
+- "well known address"
+
+- server can skip bind(), call listen() directly -- it'll get an
+_ephemeral_ port. Server must register for clients to find it (cf
+"well known")
+
+(listen SOMAXCONN) was 5, Linux default max now 128
+
+- multiple fds on same socket
+
+- _connected_ datagram sockets (Linux only?)
+
+- bind Unix domain in an accessible, writable directory -> security
+
+- Unix domain datagram: reliable, in-order, no duplicates
+
+- dgram size: SO_SNDBUF, 2KB = safe
+
+- possible silent truncation on receiver
+
+Linux Abstract Socket Namespace
+
+- automatically removed! no unlink required
+
+- can be used in chroot w/o filesystem -> security
+
+(modern TCP discovers "path MTU" to avoid IP fragmentation)
+
+(INADDR_ANY aka 0.0.0.0)
+
+(FQDN terminated by period: example.com = domain; example.com. = FQDN)
+
+- Unix vs Inet socket: Unix sometimes faster, dir (+file) perms, pass
+FDs, pass credentials
+
+- official Echo server -- in Inetd
+
+- multiproc server: each child does accept(), or server accept(), pass
+FD to child
+
+Theme: every one knows TCP + UDP networking; most of what we know is
+wrong, and there's a lot of other services.
+
+TODO: xinetd
+
+(inetd rebinds TCP/UDP to stdio)
+
+(socket half close, SHUT_WR; on socket FD _not_ link)
+
+- send/recv: socket additional options: nonblock, OOB, PEEK, WAITALL,
+MORE/CORK)
+
+- sendfile w/ FD mmap'able, ~ regular file
+
+	- specify offset + count _per call_ -- array of messages! TRICK
+
+*SECTION: overview
+*SECTION: caveats / tricks
+*SECTION: services (NETLINK)
+*SECTION: future (Docker, Cgroups) and past (mmap IPC; last month)
+
+TODO: splice, vmsplice, tee
+
+- CORK ex: HTTP headers + data
+
+(TIME_WAIT + SO_REUSEADDR)
+
+(OOB: SIGURL for socket owner
+- hmm: max one byte, one outstanding at a time
+- discouraged, unreliable)
+
+- sendmsg/recvmsg most flexible, including scatter/gather, _ancillary
+data_
+	- (recv in msg() - get multiple messages)
+
+	- ancillary: send FD, send rights
+
+- Sequenced Packet Sockets (Unixdom)
+	- conn, _msg boundaries_, reliable, no dups, in order
+	- SCTP: seq packet over internet; DCCP(?)
+	multi stream: logical over one connection
+
+(signalfd, pselect)
+
+(self-pipe trick)
 
 

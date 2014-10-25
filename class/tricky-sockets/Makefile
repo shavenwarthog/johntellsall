@@ -38,6 +38,7 @@ single:
 	sphinx-build -b singlehtml -d _build/doctrees \
 	. _build/singlehtml
 
+
 .PHONY: jslides
 jslides: index.rst
 		sphinx-build -qN -b slides -d _build/doctrees \
