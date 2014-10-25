@@ -1,0 +1,22 @@
+>>> ip = IPRoute() ; ip.monitor()
+>>> pprint(ip.get())
+[{'attrs': [['NDA_DST', '192.168.1.1'],
+            ['NDA_LLADDR', 'c8:d7:19:6c:4b:e4'],
+            ['NDA_PROBES', 1],
+            ['NDA_CACHEINFO',
+             {'ndm_confirmed': 1736,
+              'ndm_refcnt': 1,
+              'ndm_updated': 0,
+              'ndm_used': 8877}]],
+  'event': 'RTM_NEWNEIGH',
+  'family': 2,
+  'flags': 0,
+  'header': {'error': None,
+             'flags': 0,
+             'length': 76,
+             'pid': 0,
+             'sequence_number': 0,
+             'type': 28},
+  'ifindex': 50331648,
+  'ndm_type': 4,
+  'state': 0}]
