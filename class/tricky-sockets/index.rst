@@ -11,7 +11,7 @@ ME
 ====
 
    - Senior dev/server consultant; DevOps
-   - 15 years experience with Python
+   - 20 years experience with Python
    - john@johntellsall.com
 
 
