@@ -71,19 +71,20 @@ http://stackoverflow.com/questions/3324619/unix-domain-socket-using-datagram-com
 
 	ngx_channel.c:ngx_write_channel
 
-    - also
-   https://github.com/slideinc/sendmsg -- for Python
+    https://github.com/slideinc/sendmsg -- for Python
 
 
-Apache doesn't use sendfd() trick!  I haven't braved the code base yet
--- it likely uses something even more awesome than the parent process
-copying bytes back and forth. Uwsgi and Nginx use sendmsg(), but
-Apache, Gunicorn, Redis, Unicorn, and Varnish don't.
+   Apache doesn't use sendfd() trick!  I haven't braved the code base yet
+   it likely uses something even more awesome than the parent process
+   copying bytes back and forth. Uwsgi and Nginx use sendmsg(), but
+   Apache, Gunicorn, Redis, Unicorn, and Varnish don't.
 
 
-- server can skip bind(), call listen() directly -- it'll get an
-_ephemeral_ port. Server must register for clients to find it (cf
-"well known")
+- server can skip bind(), call listen() directly
+  it'll get an _ephemeral_ port
+
+.. note::
+   . Server must register for clients to find it (cf "well known")
 
 
 TODO - multiple fds on same socket
@@ -109,7 +110,7 @@ Linux Abstract Socket Namespace
 
 - sendfile w/ FD mmap'able, ~ regular file
 
-	- specify offset + count _per call_ -- array of messages! TRICK
+	- specify offset + count _per_call_ -- array of messages! TRICK
 
 
 MAYBE: - send/recv: socket additional options: nonblock, OOB, PEEK,
@@ -120,15 +121,18 @@ WAITALL, MORE/CORK)
 
 TODO: splice, vmsplice, tee
 
-- sendmsg/recvmsg most flexible, including scatter/gather, _ancillary
-data_
+- sendmsg/recvmsg most flexible
+  including scatter/gather, _ancillary_data_
+
 	- (recv in msg() - get multiple messages)
 
 	- ancillary: send FD, send rights
 
 - Sequenced Packet Sockets (Unixdom)
-	- conn, _msg boundaries_, reliable, no dups, in order
+	- conn, _msg_boundaries_, reliable, no dups, in order
 	- SCTP: seq packet over internet; DCCP(?)
-	multi stream: logical over one connection
+
+.. note::
+   multi stream: logical over one connection
 
 
