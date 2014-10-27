@@ -1,6 +1,10 @@
 SHELL := /bin/bash
 
-all: jslides single
+all: single # jslides
+
+count:
+	/bin/echo index.rst wrong.rst tricks.rst awesome.rst \
+	| xargs wc -l
 
 %.src: %.py
 	python $< > $@
@@ -33,10 +37,13 @@ images:
         | awk '{print ".. image::",$$1}'
 
 
+# Hieroglyph: -j9=parallel, -n=nitpicky, -b=use single builder,
+# -N=no colors;
+# then: sourcedir builddir sourcefiles
 .PHONY: single
 single:
-	sphinx-build -b singlehtml -d _build/doctrees \
-	. _build/singlehtml
+	sphinx-build -j9 -n -N -b singlehtml \
+	. _build/singlehtml index.rst
 
 
 .PHONY: jslides
