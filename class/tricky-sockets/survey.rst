@@ -3,12 +3,35 @@ SURVEY
 
 what types of IPC are there?
 
+Internet socket survey
+----------------------
+
+TCP sockets
+	reliable stream of bytes
+
+    bidirectional
+
+
+UDP sockets
+    small packets (0.5KB - 63KB)
+
+	fast, low latency
+
+    unreliable
+
+    super powers!
+
+
+.. note::
+
+   drops, dups, reordering
+
+generally a mistake to use IP-Size > PMTU (commonly ~1500)
+
 
 TCP sockets
 -----------
 
-- address: Internet, IP+port
-- reliable stream of bytes
 
 
 UDP socket
@@ -36,7 +59,9 @@ Unix sockets
 - address: unnamed, path, or "abstract namespace"
 - same machine, bidirectional
 - byte streams, packets, and seq packets
+
 * fast!
+
 * low latency!
  
 

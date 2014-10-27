@@ -2,6 +2,10 @@ SHELL := /bin/bash
 
 all: single # jslides
 
+sendmsg:
+	find . -name '*.c' | xargs egrep -q sendmsg | egrep -v zmq
+
+
 count:
 	/bin/echo index.rst wrong.rst tricks.rst awesome.rst \
 	| xargs wc -l

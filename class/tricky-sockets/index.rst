@@ -34,6 +34,13 @@ Won't cover: (kernel) queues, RT signals, ipfilter subsystem; also
 TIPC, inotify
 
 
+.. include:: survey.rst
+.. include:: wrong.rst
+.. include:: tricks.rst
+.. include:: awesome.rst
+
+
+
 
 - _connected_ datagram sockets (Linux only?)
 
@@ -64,7 +71,13 @@ AF_PACKET           Low level packet interface
 
 "socket" creates a record in the kernel, which talks to a driver
 
+☃
+=
 
+.. py:function:: enumerate(sequence[, start=0])
+
+   Return an iterator that yields tuples of an index and an item of the
+   *sequence*. (And so on.)
 
 ☃
 =

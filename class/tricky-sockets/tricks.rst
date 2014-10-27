@@ -27,12 +27,15 @@ They support packet and sequenced packet modes.
 
 TODO: dgram packet size
 
+TODO: socketpair?
 
 This is used by real code -- like Kismet
 
 AF_UNIX SOCK_DGRAM in Kismet
 
-int IPCRemote::SpawnIPC() {
+.. code::
+
+  int IPCRemote::SpawnIPC() {
 	// Don't build the socket pair if we're in exec child mode
 	if (child_exec_mode == 0) {
 		// Generate the socket pair before the split
@@ -54,18 +57,22 @@ http://stackoverflow.com/questions/3324619/unix-domain-socket-using-datagram-com
 
 
 * sendmsg()
-# find . -name '*.c' | xargs egrep -q sendmsg | egrep -v zmq
+
 - Redis: no
 - Apache: ?
-	http://httpd.apache.org/docs/current/mod/mod_proxy_fdpass.html
 - Nginx: yes
-	ngx_channel.c:ngx_write_channel
-
 - Unicorn/Gunicorn:
 - Uwsgi: yes
 - Varnish: no?
-- also
-	https://github.com/slideinc/sendmsg -- for Python
+
+.. note::
+
+	http://httpd.apache.org/docs/current/mod/mod_proxy_fdpass.html
+
+	ngx_channel.c:ngx_write_channel
+
+    - also
+   https://github.com/slideinc/sendmsg -- for Python
 
 
 Apache doesn't use sendfd() trick!  I haven't braved the code base yet
