@@ -1,3 +1,10 @@
+everything you know is wrong
+============================
+
+.. figure:: /_static/KKKFerrisWheel.JPG
+   :class: fill
+
+
 TCP Sockets:
 Q: what happens if your process exits w/o closing the socket?
 
@@ -8,8 +15,15 @@ A: yes, as a kernel structure
 Kernel gives "socket.error: [Errno 98] Address already in use"
 if you try to create it again.
 
-(It's waiting for delinquent packets to flow into previously-existing
-TCP socket.)
+waiting for delinquent packets
+------------------------------
+
+.. image:: _static/delinquent.jpg
+
+.. note::
+
+   It's waiting for delinquent packets to flow into
+   previously-existing TCP socket.
 
 
 
@@ -68,7 +82,7 @@ LPI book: ioctl(fd, FIONREAD, &count) to get number of unread bytes in stream, o
 UDP reliability
 =================
 
-How unreliable is it sending occasional small packets acrost the
+How reliable is sending occasional small packets acrost the
 earth: 50%? 80%?
 
 .. note::
@@ -78,7 +92,7 @@ earth: 50%? 80%?
 well...
 =======
 
-
+.. image:: _static/udp-reliability.png
 
 
 http://openmymind.net/How-Unreliable-Is-UDP/

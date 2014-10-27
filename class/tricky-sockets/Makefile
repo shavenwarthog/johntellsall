@@ -47,7 +47,8 @@ images:
 .PHONY: single
 single:
 	sphinx-build -j9 -n -N -b singlehtml \
-	. _build/singlehtml index.rst
+	. _build/singlehtml index.rst \
+	2>&1 | egrep -v 'any doctree'
 
 
 .PHONY: jslides
