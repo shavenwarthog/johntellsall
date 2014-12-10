@@ -6,7 +6,6 @@
 Tricking out Linux Networking
 =============================
 
-
 ME
 ====
 

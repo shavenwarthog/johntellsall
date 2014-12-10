@@ -1,6 +1,12 @@
 SURVEY
 ============================
 
+performance tools
+-----------------
+
+http://www.brendangregg.com/linuxperf.html
+
+
 what types of IPC are there?
 
 Internet socket survey
@@ -26,7 +32,12 @@ UDP sockets
 
    drops, dups, reordering
 
-generally a mistake to use IP-Size > PMTU (commonly ~1500)
+   generally a mistake to use IP-Size > PMTU (commonly ~1500)
+
+   Q: but what about in a LAN?  A: unknown; congestion?
+
+   TCP vs UDP for gaming: in practice
+   http://gafferongames.com/networking-for-game-programmers/udp-vs-tcp/
 
 
 TCP sockets
