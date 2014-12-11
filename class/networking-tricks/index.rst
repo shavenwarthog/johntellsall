@@ -351,35 +351,37 @@ get a descriptor to use it in the future.
 what is a file?
 ===============
 
-.. image:: _static/ArtikelKoppelingCSV02.png
+.. image:: _static/csv.jpg
 
 seekable, rewritable sequence of persistent bytes
-how do you get one?
-have a path, system gives you a “handle”. This lets you control the file.  If you give the handle to the system you can control it
-(Note a path is an “address” of a resource)
-what can you do with it?
-close, read, write, fcntrl
+   how do you get one?
+
+   have a path, system gives you a “handle”. This lets you control the
+   file.  If you give the handle to the system you can control it (Note a
+   path is an “address” of a resource) what can you do with it?  close,
+   read, write, fcntrl
 
 
 what is a (TCP) socket?
-=======================
+-----------------------
 
-connection btw two endpoints; a “stream” of bytes -- they’re “consumed” on each side X
-how do you get one?
-ask for “handle” given an address (+ family)
-what can you do with it?
-close, recv, send, ioctl
+.. note::
+   connection btw two endpoints
+   a “stream” of bytes -- they’re “consumed” on each side X
+   how do you get one?
+   ask for “handle” given an address (+ family)
+   what can you do with it?
+   close, recv, send, ioctl
 
 ``sock = socket.socket(AF_INET, SOCK_STREAM)``
 ``try:``
 ``    # Connect to server and send data``
-    sock.connect((HOST, PORT))
-    sock.sendall(data + "\n")
-
-    # Receive data from the server and shut down
-    received = sock.recv(1024)
-finally:
-    sock.close()
+``    sock.connect((HOST, PORT))``
+``    sock.sendall(data + "\n")``
+``    # Receive data from the server and shut down``
+``    received = sock.recv(1024)``
+``finally:``
+``    sock.close()``
 
 
 similar
@@ -447,13 +449,15 @@ Cool Networking Tricks
 Networking in One Slide
 =======================
 
-TCP sockets:
+beer
+
 * reliable
 * simple
 * go through firewalls
 * adapt themselves to traffic
 * very well-understood
 * get message or error
+
 
 Okay, Two Slides
 ================
@@ -516,9 +520,6 @@ not much!
 
    http://stackoverflow.com/questions/2028874/what-happens-to-an-open-file-handler-on-linux-if-the-pointed-file-gets-moved-de
 
-
-
-
 XX http://alban-apinc.blogspot.com/2011/12/introducing-multicast-unix-sockets.html
 
 
@@ -530,15 +531,29 @@ XX http://alban-apinc.blogspot.com/2011/12/introducing-multicast-unix-sockets.ht
 XX: RAW and DGRAM sockets
 http://man7.org/linux/man-pages/man7/packet.7.html
 
-Everything is Awesome -- Future Directions
-==========================================
+Everything is Awesome
+=====================
+*future directions*
+
+Other classes of networks
+=========================
 
 Need IP to communicate?
-* no: MAC addr; ARP XX
 
-Need any addr to communicate?
+* no: MAC addr, Bluetooth, ...
 
-* not really: direct hardware ring buffer to communicate. 10x performance, at the cost of abandoning a lot of Linux services XX link
+Need *any* addr to communicate?
+
+
+hardware ring buffer
+~~~~~~~~~~~~~~~~~~~~
+
+10x performance ...
+... at the cost of doing everything yourself!
+
+.. note::
+   ... at the cost of 
+   direct hardware ring buffer to communicate. 10x performance, at the cost of abandoning a lot of Linux services XX link
 
 intra-cluster communication
 ===========================
