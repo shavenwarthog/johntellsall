@@ -11,6 +11,14 @@ single:
 	. _build/singlehtml index.rst \
 	2>&1 | egrep -v 'any doctree'
 
+.PHONY: jslides
+jslides: index.rst
+	sphinx-build -qN -b slides -d _build/doctrees \
+	. _build/slides
+
+# info:
+# 	wc -l *.rst
+
 
 
 # zoot:
@@ -26,16 +34,10 @@ automake:
 		--pattern='*.rst' --command 'make all'
 
 
-# .PHONY: jslides
-# jslides: index.rst
-#                 sphinx-build -qN -b slides -d _build/doctrees \
-#                 . _build/slides
-#                 @echo
-#                 wc -l *.rst
 
 # :::::::::::::::::::::::::::::::::::::::: PUSH
 
-WEB := $(HOME)/src/johntellsall/website/class/networking-tricks
+WEB := $(HOME)/src/johntellsall/website/networking-tricks
 
 # copy all but backup files and output files, like '_build'
 push:
