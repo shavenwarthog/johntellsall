@@ -3,17 +3,9 @@
 
 http://johntellsall.com/networking-tricks
 
+John Mitchell
 
-INBOX
-=====
 
-* Q: what happens if your process exits w/o closing the socket?
-* Docker containers
-* Netlink
-* `AF_UNIX sockets and the abstract namespace, inter-process communication <http://blog.eduardofleury.com/archives/2007/09/13>`_ by Eduardo Fleury
-* what _is_ the kernel? http://lwn.net/Articles/534682/
-
-* http://highscalability.com/blog/2014/2/12/paper-network-stack-specialization-for-performance.html
 
 
 
@@ -46,7 +38,8 @@ apps talk to other apps
    and... DETAILS MATTER!
 
 .
-===============
+=
+
 .. figure:: _static/css-is-awesome-700x375.jpg
    :class: fill
 
@@ -82,6 +75,20 @@ this talk
 
 
 
+what is the kernel?
+===================
+
+.
+=
+
+.. figure:: _static/batman-secrets-of-the-batcave.jpg
+   :class: fill
+
+
+.. note::
+   * what _is_ the kernel? http://lwn.net/Articles/534682/
+
+
 Q: what types of IPC are there?
 ===============================
 
@@ -95,6 +102,8 @@ connectionless
 .. note::
    Everyone knows this stuff, but there’s a lot of details which can be subtle, or awesome.
 
+   There will be a cheat sheet later
+
 
 tail -f syslog | egrep ERR
 ===================================
@@ -106,8 +115,13 @@ good old *pipes*
 * one-way reliable stream of bytes
 * bytes consumed by sink
 
-.. note::
-   JM diagram
+
+
+pipe
+~~~~~~~~~~~~
+
+.. figure:: _static/cam-pipe.jpg
+   :class: fill
 
 
 trick: file path = network
@@ -139,22 +153,28 @@ Internet sockets
 TCP socket
 ==========
 
+   * connection-oriented
+   * reliable stream of bytes
+   * bytes consumed by sink
+   * *difference*: bidirectional
+   * *difference*: on each end is an “address”: IP address, a (TCP) port
+
+TCP
+===
+
+.. figure:: _static/cam-http.jpg
+   :class: fill
+
 
 .. note::
+   * address: anonymous (or path)
+
    Metaphor is a “pipe”: path with two endpoints -- connection oriented
    -- reliable ordered stream of bytes.
 
    Usage: client connects to endpoint on server, transfer data back and forth
 
    Example: used for web and tons of stuff.
-
-   * connection-oriented
-   * address: anonymous (or path)
-   * one-way reliable stream of bytes
-   * bytes consumed by sink
-   * difference from pipes: bidirectional
-   * difference: on each end is an “address”: IP address, a (TCP) port
-
 
 
 TCP features
@@ -175,21 +195,25 @@ more: "Hello, would you like to hear a TCP joke?"
 UDP socket
 ==========
 
-Usage: short send/receive (DNS), or fast unreliable one-way data like
-Skype, or statistics
-
-Example: Domain Name Service (DNS) -- send short string (hostname) to well-known UDP address, get a short response (IP number)
-
-Metaphor is a “postcard”: a little bit of data going from one street address to another. Like postcards, UDP packets can be received out of order or not at all, you will never know if a packet arrived or not. You can also get duplicate packets. 
-
-* address: IP and port number, but not the same as TCP ports!
+* address: IP and port number
 * connectionless
 * fast
 * low latency
-
-* small packets not bytes, around 1.5KB
-* unreliable: drops, dups, reordering
 * multicast is awesome
+* small packets not bytes
+* *drawback:* unreliable: drops, dups, reordering
+
+DNS:
+.. note:
+   port NOT same as TCP ports!
+
+   Usage: short send/receive (DNS), or fast unreliable one-way data
+   like Skype, or statistics
+
+   Example: Domain Name Service (DNS) -- send short string (hostname) to well-known UDP address, get a short response (IP number)
+
+Metaphor is a “postcard”: a little bit of data going from one street address to another. Like postcards, UDP packets can be received out of order or not at all, you will never know if a packet arrived or not. You can also get duplicate packets. 
+
 
 
 JM: graphic of crazed TMCM
@@ -364,6 +388,8 @@ seekable, rewritable sequence of persistent bytes
 
 what is a (TCP) socket?
 -----------------------
+
+x
 
 .. note::
    connection btw two endpoints
@@ -546,12 +572,15 @@ Need *any* addr to communicate?
 
 
 hardware ring buffer
-~~~~~~~~~~~~~~~~~~~~
+====================
+
 
 10x performance ...
 ... at the cost of doing everything yourself!
 
 .. note::
+   * http://highscalability.com/blog/2014/2/12/paper-network-stack-specialization-for-performance.html
+
    ... at the cost of 
    direct hardware ring buffer to communicate. 10x performance, at the cost of abandoning a lot of Linux services XX link
 
