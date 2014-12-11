@@ -20,10 +20,10 @@ INBOX
 Me
 ==
 
-* Senior dev/server consultant; DevOps
+* Senior web/server consultant; DevOps
 * 20 years experience with Python
-* Systems Engineer
 * john@johntellsall.com
+
 
 ☃
 =
@@ -33,27 +33,43 @@ Me
 Themes
 ======
 
-Most apps talk to other apps
-There are tons of kernel structures to make this happen -- many are unknown or have subtle details. It looks like it works one way, but there are important differences.
+apps talk to other apps
 
-Details matter!
+.. note::
+
+   There are tons of kernel structures to make this happen -- we'll cover about a dozen types tonight.
+
+   Many are unknown or have subtle details. 
+
+   It looks like it works one way, but there are important differences.
+   
+   and... DETAILS MATTER!
+
+.
 ===============
-.. image:: _static/css-is-awesome-700x375.jpg
+.. figure:: _static/css-is-awesome-700x375.jpg
+   :class: fill
+
+.. note::
+   details matter!
+
 
 
 choose your own tradeoffs
 =========================
 
-How apps talk to each other matters:
+*How* apps talk to each other matters:
 
-* let system do work => simpler code
+* system does work => simpler code
+
+* *you* know your app best
+
 
 .. note::
 
    * instead of “one size fits all” use specific features that fit your app
-     * you know your app best
 
-=> theme: concept doesn’t match implementation
+       => theme: concept doesn’t match implementation
 
 
 this talk
@@ -67,40 +83,55 @@ this talk
 
 
 Q: what types of IPC are there?
-============================
+===============================
 
 
 Overview of Sockets
 ===========================
 
-Two (or more) processes, address for each, connection-oriented or connectionless
+Two (or more) processes, address for each, connection-oriented or
+connectionless
 
 .. note::
    Everyone knows this stuff, but there’s a lot of details which can be subtle, or awesome.
 
-Pipe
-====
-Example: tail -f /var/log/syslog | egrep ERR
 
-Usage: used everywhere
+tail -f syslog | egrep ERR
+===================================
+
+good old *pipes*
 
 * connection-oriented
 * address: anonymous (or path)
 * one-way reliable stream of bytes
 * bytes consumed by sink
 
-JM diagram
+.. note::
+   JM diagram
 
 
-Trick: file path = network
+trick: file path = network
 ==========================
 
-Named Pipes are awesome: multiple sources/sinks, useful
+*named pipes* are awesome
 
-Anything with a “file address” (ie: a path), can be connected to anything else.
+anything with a *file address* (ie: path), can be connected to
+anything that expects a file
 
-JM expand
-JM diagram
+
+Postgres import from stream
+===========================
+
+    ``mkfifo --mode=0666 /tmp/pipe``
+
+    ``psql -c "COPY x.x FROM '/tmp/pipe'``
+
+    ``gunzip < data.gz > /tmp/pipe``
+
+.. note::
+   /tmp/pipe is an *address* (file path)
+
+   JM diagram
 
 Internet sockets
 ================
@@ -108,21 +139,37 @@ Internet sockets
 TCP socket
 ==========
 
-Metaphor is a “pipe”: path with two endpoints -- connection oriented
--- reliable ordered stream of bytes.
 
-Usage: client connects to endpoint on server, transfer data back and forth
+.. note::
+   Metaphor is a “pipe”: path with two endpoints -- connection oriented
+   -- reliable ordered stream of bytes.
 
-Example: used for web and tons of stuff.
+   Usage: client connects to endpoint on server, transfer data back and forth
 
-- difference from pipes: Bidirectional
+   Example: used for web and tons of stuff.
 
-* difference: on each end is an “address”: IP address and a (TCP) port
+   * connection-oriented
+   * address: anonymous (or path)
+   * one-way reliable stream of bytes
+   * bytes consumed by sink
+   * difference from pipes: bidirectional
+   * difference: on each end is an “address”: IP address, a (TCP) port
 
-Used everywhere because it does a ton of stuff:
+
+
+TCP features
+===============================================
+
 * automatic flow control
 * split/join packets
-* drawback: latency
+* *drawback:* latency
+
+more: "Hello, would you like to hear a TCP joke?"
+
+.. note:
+
+   Used everywhere because it does a ton of stuff:
+
 
 
 UDP socket
@@ -148,45 +195,69 @@ Metaphor is a “postcard”: a little bit of data going from one street address
 JM: graphic of crazed TMCM
 
 
-Question
-========
+How do you know what went wrong?
+================================
 
-Q: with UDP, how do you know what went wrong?
+* server isn't up
+* wrong IP / port
+* bad router
+* satellite link
+* overloaded server
 
-Server isn't up, wrong IP, wrong port, bad router, satellite link,
-overloaded server?
+.. note::
+   theme: details matter!
 
 Answer
 =======
 
-A: no response, so you’ll never know!
 
 .. note::
 
+   A: no response, so you’ll never know!
+
    theme: best tool for the job
 
-   Detail: connection oriented isn’t always the best: can’t interrupt
+
+Detail: UDP vs TCP
+==================
+
+which is better?
+
+.. note::
+   connection oriented isn’t always the best: can’t interrupt
    data flow; CPU has to examine each and every byte to figure out
    where messages begin and end
 
-JM diagram
+   JM diagram
 
 
-Summary
-
-2+ processes
-address for each side
 
 
-Detail: UDP psuedo-connections
+Detail: UDP pseudo-connections
 ==============================
 
-Detail: Q: for connectionless protocols, how does server know who to send response to?
-XX UDP: how do you know who sent you a packet?
+Q: for connectionless protocols (UDP), how does server know who to
+send response to?
 
-A: kernel gives you user data, but there’s also other data available. (JM: how?)  IP header has client’s IP.
-(JM: what about UDP port?)
-(JM: example UDP “send to client”)
+.. note::
+   UDP: how do you know who sent you a packet?
+
+Answer
+======
+
+A: kernel gives you user data, but there’s also other data available
+in the network headers
+
+.. note::
+   server bind: s.bind((HOST, PORT))
+   server: data,addr = s.recvfrom(1024)
+
+   client send: s.sendto(msg, (host, port))
+   client: reply,addr = s.recvfrom(1024)
+
+   (JM: how?)  IP header has client’s IP.
+   (JM: what about UDP port?)
+   (JM: example UDP “send to client”)
 
 
 UDP multicast
@@ -194,7 +265,9 @@ UDP multicast
 
 Q: who uses Publish/Subscribe with Redis or ZeroMQ?
 
-Example: Facebook/Twitter updates. Reads are common, writes are rare. When account gets a new update, all his friends are sent an update
+Example: Facebook/Twitter updates. Reads are common, writes are
+rare. When account gets a new update, all his friends are sent an
+update
 
 => we can replace some of these use cases with UDP multicast, on many machines!
 
@@ -238,23 +311,9 @@ queues like Redis
 Special features
 ================
 
-* send “file descriptor” (JM: ?) to unrelated process
+* send “file descriptor” to unrelated process
 * send credentials to other process
 
-
-Addresses
-=========
-
-AF: unnamed, path, or “abstract namespace”
-Address Family (AF)
-TCP: IP and port
-UDP: IP and (UDP) port
-named pipe: file path
-Linux Abstract XX
-
-.. note:
-   IPv6
-   MAC
 
 Flexible
 ========
@@ -273,7 +332,10 @@ http://stackoverflow.com/questions/9475442/unix-domain-socket-vs-named-pipes
 Everything we Know is Wrong
 ===========================
 
-.. image:: _static/KKKFerrisWheel.JPG
+.
+=
+.. figure:: _static/KKKFerrisWheel2.jpg
+   :class: fill
 
 INBOX
 =====
@@ -285,8 +347,11 @@ Overview
 In general, we work with kernel objects by asking for something, we
 get a descriptor to use it in the future.
 
+
 what is a file?
 ===============
+
+.. image:: _static/ArtikelKoppelingCSV02.png
 
 seekable, rewritable sequence of persistent bytes
 how do you get one?
@@ -305,6 +370,17 @@ ask for “handle” given an address (+ family)
 what can you do with it?
 close, recv, send, ioctl
 
+``sock = socket.socket(AF_INET, SOCK_STREAM)``
+``try:``
+``    # Connect to server and send data``
+    sock.connect((HOST, PORT))
+    sock.sendall(data + "\n")
+
+    # Receive data from the server and shut down
+    received = sock.recv(1024)
+finally:
+    sock.close()
+
 
 similar
 =======
@@ -315,27 +391,13 @@ files/sockets have open/close, read/write, and “control” interfaces
 but… not really
 ===============
 
-disk file
+
 
 What is a file -- “disk file”, really?
 /dev/null, /proc/fs, named pipe
 => theme: concept doesn’t match implementation
 
 
-zombie file!
-============
-
-What happens when you open a file, then delete it?
-
-Answer
-======
-
-not much!
-
-.. note::
-   details matter!
-
-   http://stackoverflow.com/questions/2028874/what-happens-to-an-open-file-handler-on-linux-if-the-pointed-file-gets-moved-de
 
 
 socket ~ stream of bytes
@@ -345,6 +407,7 @@ What is a TCP socket -- “stream of bytes”, really?
 
 Linux lets you “peek”
 
+TCP defaults to file transfer
 
 .. note::
    http://stackoverflow.com/questions/864731/if-a-nonblocking-recv-with-msg-peek-succeeds-will-a-subsequent-recv-without-msg
@@ -364,17 +427,6 @@ services, in different namespaces, with different tradeoffs
 
 
 
-UDP vs TCP
-==========
-
-we’ve talked about fast unreliable UDP and connection-oriented TCP -- what’s faster: Unix domain socket or TCP?
-
-A: for lots of connections: "friend" TCP on loopback, up to 3x
-
-.. note::
-   http://lwn.net/Articles/511079/
-
-
 but, what’s the application?
 ============================
 
@@ -384,35 +436,85 @@ Socket is not only a stream of bytes, it’s a handle
 
 => theme: concept doesn’t match implementation
 
-
-http://stackoverflow.com/questions/13953912/difference-between-unix-domain-stream-and-datagram-sockets
+.. note::
+   http://stackoverflow.com/questions/13953912/difference-between-unix-domain-stream-and-datagram-sockets
 
 
 Cool Networking Tricks
 ======================
 
-? trick: anonymous server ports
 
+Networking in One Slide
+=======================
 
-JM move
-(internet) XX section -- Conventional wisdom: use TCP sockets for anything: they’re fast, reliable, simple, and flexible. They go through firewalls, adapt themselves to traffic, very well understood.
-LAN: use UDP packets for communication:
-* fast, low latency
-* don’t have to parse JSON messages
+TCP sockets:
+* reliable
+* simple
+* go through firewalls
+* adapt themselves to traffic
+* very well-understood
+* get message or error
+
+Okay, Two Slides
+================
+
+use UDP packets:
+* fast
+* low latency
+* don’t have to parse messages
 * can’t get partial message
 * TCP stream you can’t interrupt
-* good for stats
 * same machine: no dups, drops, or latency
 
+.. note::
+   * good for stats
 
-trick: rebind socket. TCP socket as stream of bytes: using sendmsg(), server can start workers, accept a socket, then reconnect socket to already running worker, then continue listening.
 
-trick: reliable server process ID file. Classical server writes its PID to a magic file path. To signal a process, read the PID file.
-Drawbacks:
-* server crash: leaves “dangling” PID file
-A: bind to Linux Abstract space. When server exits or crashes, socket is automatically destroyed!
+
+UDP vs TCP
+==========
+
+faster?
+
+.. note::
+   we’ve talked about fast unreliable UDP and connection-oriented TCP -- what’s faster: Unix domain socket or TCP?
+
+trick: "friend" sockets
+=======================
+
+A: for lots of connections:
+
+"friend" TCP up to 3x faster than Unix domain
+
+.. note::
+   http://lwn.net/Articles/511079/
+
+
+trick: sendmsg()
+=====================
+
+.. note::
+
+   TCP socket as stream of bytes: using sendmsg(), server can start
+   workers, accept a socket, then reconnect socket to already running
+   worker, then continue listening.
 
 => theme: details matter
+
+zombie file!
+============
+
+What happens when you open a file, then delete it?
+
+trick: answer
+=============
+
+not much!
+
+.. note::
+   details matter!
+
+   http://stackoverflow.com/questions/2028874/what-happens-to-an-open-file-handler-on-linux-if-the-pointed-file-gets-moved-de
 
 
 
@@ -444,10 +546,10 @@ intra-cluster communication
 * direct support for multiple data centers
 * addr per machine not adapter
 * addr 32 bit not IP
-Transparent Inter-process Communication
+* Transparent Inter-Process Communication, or...
 
-TIPC
-====
+.
+----
 
 .. image:: _static/tipsy.png
 
@@ -583,4 +685,25 @@ http://collections.lacma.org/sites/default/files/remote_images/piction/ma-318240
 
  013_rant.gif
 
+
+_static/udp-reliablility.jpg
+
+Addresses
+=========
+
+AF: unnamed, path, or “abstract namespace”
+Address Family (AF)
+TCP: IP and port
+UDP: IP and (UDP) port
+named pipe: file path
+Linux Abstract XX
+
+.. note:
+   IPv6
+   MAC
+
+trick: reliable server process ID file. Classical server writes its PID to a magic file path. To signal a process, read the PID file.
+Drawbacks:
+* server crash: leaves “dangling” PID file
+A: bind to Linux Abstract space. When server exits or crashes, socket is automatically destroyed!
 
