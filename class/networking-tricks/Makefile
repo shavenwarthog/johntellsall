@@ -1,4 +1,4 @@
-all: single
+all: single jslides
 
 # Hieroglyph: -j9=parallel, -n=nitpicky, -b=use single builder,
 # -N=no colors;
